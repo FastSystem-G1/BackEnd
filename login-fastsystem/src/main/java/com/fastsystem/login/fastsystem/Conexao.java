@@ -11,11 +11,11 @@ public class Conexao {
         
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         //Se estiver na faculdade mudar o localhost para "localhost:3306".
-        dataSource.setUrl("jdbc:mysql://localhost:3306/fastsystem?useTimezone=true&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://localhost:3307/fastsystem?useTimezone=true&serverTimezone=UTC");
         //Se estiver na faculdade mudar o Username para "aluno" ou manter "root".
         dataSource.setUsername("root");
         //Se estiver na faculdade mudar a senha para "sptech" ou "spt3ch".
-        dataSource.setPassword("KarlTowns@103104105");
+        dataSource.setPassword("Jady220922");
 
         this.connection = new JdbcTemplate(dataSource);
     }

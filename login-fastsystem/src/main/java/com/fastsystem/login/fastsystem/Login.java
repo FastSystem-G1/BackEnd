@@ -14,6 +14,7 @@ import java.awt.Point;
 import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 /**
  *
@@ -206,18 +207,26 @@ public class Login extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Conexao con = new Conexao();
         InformacoesMaquina info = new InformacoesMaquina();
+        EmpresaMaquina teste = new EmpresaMaquina();
 
         con.getConnection();
         JdbcTemplate banco = con.getConnection();
 
         String email_usuario = String.valueOf(emailField.getText());
         String senha_usuario = String.valueOf(senhaField.getText());
+        String maquina_usuario = String.valueOf(maquinaField.getText());
 
         List loginSelect = banco.queryForList(
-                "SELECT * FROM empresa where email_empresa = '" + email_usuario + "' and senha_empresa = '" + senha_usuario + "' ;"
+                "SELECT id_empresa, id_maquina FROM Maquina\n"
+                + "INNER JOIN empresa ON empresa.id_empresa = maquina.fk_empresa\n"
+                + "WHERE nome_maquina = '" + maquina_usuario + "' "
+                + "and email_empresa = '" + email_usuario + "' "
+                + "and senha_empresa = '" + senha_usuario + "'; "
         );
 
         if (!loginSelect.isEmpty()) {
+            System.out.println("\nObejto: \n");
+            System.out.println(loginSelect);
             info.informacoes();
         } else {
             Point p = this.getLocation();
@@ -270,7 +279,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        
+
     }//GEN-LAST:event_formMouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
