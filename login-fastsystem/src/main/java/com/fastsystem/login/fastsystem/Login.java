@@ -18,7 +18,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 /**
  *
- * @author endry
+ * @author endryl
  */
 public class Login extends javax.swing.JFrame {
 
@@ -207,7 +207,6 @@ public class Login extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Conexao con = new Conexao();
         InformacoesMaquina info = new InformacoesMaquina();
-        EmpresaMaquina teste = new EmpresaMaquina();
 
         con.getConnection();
         JdbcTemplate banco = con.getConnection();
@@ -218,16 +217,25 @@ public class Login extends javax.swing.JFrame {
 
         List loginSelect = banco.queryForList(
                 "SELECT id_empresa, id_maquina FROM Maquina\n"
-                + "INNER JOIN empresa ON empresa.id_empresa = maquina.fk_empresa\n"
+                + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
                 + "WHERE nome_maquina = '" + maquina_usuario + "' "
                 + "and email_empresa = '" + email_usuario + "' "
                 + "and senha_empresa = '" + senha_usuario + "'; "
         );
+        
+        EmpresaMaquina login;
+        login = banco.queryForObject(
+                "SELECT id_empresa, id_maquina FROM Maquina\n"
+                        + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
+                        + "WHERE nome_maquina = '" + maquina_usuario + "' "
+                                + "and email_empresa = '" + email_usuario + "' "
+                                        + "and senha_empresa = '" + senha_usuario + "'; ",
+                new BeanPropertyRowMapper<>(EmpresaMaquina.class));
 
         if (!loginSelect.isEmpty()) {
-            System.out.println("\nObejto: \n");
-            System.out.println(loginSelect);
+            System.out.println("\nObjeto: \n");
             info.informacoes();
+            //info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
         } else {
             Point p = this.getLocation();
             Login loginGui = this;

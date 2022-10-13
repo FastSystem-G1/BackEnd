@@ -1,10 +1,15 @@
 package com.fastsystem.login.fastsystem;
 
 import com.github.britooo.looca.api.core.Looca;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class InformacoesMaquina {
     Looca looca = new Looca();
+    Conexao con = new Conexao();
+    
+    JdbcTemplate banco = con.getConnection();
     
     String informacoesMemoria = String.format(
             "\nMemória"
@@ -53,6 +58,32 @@ public class InformacoesMaquina {
             looca.getGrupoDeProcessos().getTotalProcessos(),
             looca.getGrupoDeProcessos().getProcessos()
     );
+    
+    public void inserirInformacoesBanco(Integer idMaquina, Integer idEmpresa){
+        inserirInformacoesProcessador(idMaquina);
+    }
+    
+    public void inserirInformacoesProcessador(Integer idMaquina) {
+        String nome = "Processador";
+        Boolean isAtivo = true;
+        String fabricante = looca.getProcessador().getFabricante();
+        String modelo = looca.getProcessador().getNome();
+        Integer capacidade = 100;
+        
+        banco.update(
+                "INSERT INTO Componente VALUES"
+              + "( null, "+nome+", "+isAtivo+", "+fabricante+", "+modelo+", "+capacidade+");"
+        );
+        /*
+        ResultSet idComponente = banco.executeQuery(
+                "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;"
+        );
+        
+        banco.update(
+                ""
+        );
+        */
+    }
     
     public void informacoes() {
         System.out.println(
