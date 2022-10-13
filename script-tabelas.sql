@@ -37,6 +37,8 @@ fk_empresa INT,
 tipo_maquina VARCHAR(7),
 CHECK (tipo_maquina = 'DESKTOP' or tipo_maquina = 'TOTEM'),
 nome_maquina VARCHAR(15),
+sistema_operacional_maquina varchar(45),
+tempo_atividade_maquina datetime,
 FOREIGN KEY(fk_empresa) REFERENCES Empresa(id_empresa)
 )AUTO_INCREMENT = 0;
 
