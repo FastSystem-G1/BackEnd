@@ -2,6 +2,7 @@ package com.fastsystem.login.fastsystem;
 public class EmpresaMaquina {
     private Integer idEmpresa = 0;
     private Integer idMaquina = 0;
+    private Integer idComponente = 0;
 
     public Integer getIdEmpresa() {
         return idEmpresa;
@@ -17,9 +18,13 @@ public class EmpresaMaquina {
 
     public void setIdMaquina(Integer idMaquina) {
         this.idMaquina = idMaquina;
+    } 
+
+    public Integer getIdComponente() {
+        return idComponente;
     }
 
-
-    
-    
+    public void setIdComponente(Integer idComponente) {
+        this.idComponente = idComponente;
+    }
 }

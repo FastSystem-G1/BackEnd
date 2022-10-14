@@ -38,18 +38,18 @@ tipo_maquina VARCHAR(7),
 CHECK (tipo_maquina = 'DESKTOP' or tipo_maquina = 'TOTEM'),
 nome_maquina VARCHAR(15),
 sistema_operacional_maquina varchar(45),
-tempo_atividade_maquina datetime,
+tempo_atividade_maquina LONG,
 FOREIGN KEY(fk_empresa) REFERENCES Empresa(id_empresa)
 )AUTO_INCREMENT = 0;
 
-INSERT INTO Maquina VALUES 
+INSERT INTO Maquina (id_maquina, fk_empresa, tipo_maquina, nome_maquina) VALUES 
 ( null, 1, "DESKTOP", "Desktop 1" ),  
 ( null, 2, "TOTEM", "Totem 1" ),
 ( null, 2, "DESKTOP", "Desktop 1" );
 
 SELECT id_empresa, id_maquina FROM Maquina
 	INNER JOIN empresa ON empresa.id_empresa = maquina.fk_empresa
-		WHERE nome_maquina = 'Desktop 1' and email_empresa;
+		WHERE nome_maquina = 'Desktop 1' and email_empresa = 'endryl@gmail.com' and senha_empresa = 12345678;
 
 -- CREATE TABLE App(
 -- id_app INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -72,9 +72,10 @@ is_ativo BOOLEAN,
 fabricante_componente VARCHAR(45),
 modelo_componente VARCHAR(100),
 capacidade_componente INT
-)AUTO_INCREMENT = 2000;
+);
 
 SELECT * FROM Componente;
+TRUNCATE Componente;
 -- Processador
 INSERT INTO Componente VALUES
 ( null, 'Processador', true, "GenuineIntel", 'Intel(R) Core(TM) i3-4005U CPU @ 1.70GHz', 100 );
@@ -95,14 +96,16 @@ FOREIGN KEY(fk_maquina) REFERENCES Maquina(id_maquina)
 );
 
 SELECT * FROM Componente;
+SELECT * FROM Maquina;
 SELECT * FROM  Componente_Maquina;
-INSERT INTO Componente_Maquina VALUES
-( 2000, 1 ),
-( 2001, 1 ),
-( 2002, 1 ),
-( 2003, 2 );
 
-SELECT nome_empresa, nome_maquina, nome_componente, modelo_componente, capacidade_componente FROM Empresa
+INSERT INTO Componente_Maquina VALUES
+( 1, 1 ),
+( 3, 1 ),
+( 4, 1 ),
+( 2, 2 );
+
+SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa
 	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa
 	INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
     INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente;

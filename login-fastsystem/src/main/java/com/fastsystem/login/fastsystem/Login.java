@@ -233,9 +233,8 @@ public class Login extends javax.swing.JFrame {
                 new BeanPropertyRowMapper<>(EmpresaMaquina.class));
 
         if (!loginSelect.isEmpty()) {
-            System.out.println("\nObjeto: \n");
             info.informacoes();
-            //info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
+            info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
         } else {
             Point p = this.getLocation();
             Login loginGui = this;
