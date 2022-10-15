@@ -235,7 +235,7 @@ public class Login extends javax.swing.JFrame {
         if (!loginSelect.isEmpty()) {
             info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
         } else {
-            Point p = this.getLocation();
+            /*Point p = this.getLocation();
             Login loginGui = this;
             new Thread() {
                 @Override
@@ -252,7 +252,7 @@ public class Login extends javax.swing.JFrame {
                         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            }.start();
+            }.start();*/
             JOptionPane.showMessageDialog(null, "Email ou senha inválidos! \nVerifique também se máquina está correta!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
             emailField.setText("");
             senhaField.setText("");

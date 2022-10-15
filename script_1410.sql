@@ -110,14 +110,25 @@ FOREIGN KEY(fk_tipo_registro) REFERENCES Tipo_Registro(id_tipo_registro)
 
 
 -- Faça esses selects
+SELECT * FROM Maquina;
+
 SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa
 	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa
 	INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
     INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente;
     
-SELECT * FROM Maquina;
+SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa
+	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa
+	INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
+    INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente
+		WHERE id_empresa = 2 and id_maquina = 2;
+        
+SELECT * FROM Registro;
+        
+SELECT nome_empresa, id_maquina FROM Empresa
+	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa;
 
-
+/*
 -- TESTES
 SELECT * FROM Componente;
 TRUNCATE Componente;
@@ -157,10 +168,6 @@ INSERT INTO Registro VALUES
 
 -- SELECTS
 
-SELECT id_empresa, id_maquina FROM Maquina
-	INNER JOIN empresa ON empresa.id_empresa = maquina.fk_empresa
-		WHERE nome_maquina = 'Desktop 1' and email_empresa = 'endryl@gmail.com' and senha_empresa = 12345678;
-
 SELECT nome_empresa, id_maquina FROM Empresa
 	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa;
 
@@ -170,6 +177,8 @@ SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa
     INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente
 		WHERE id_empresa = 1 and id_maquina = 1;
         
+SELECT * FROM Componente;
+        
 SELECT nome_maquina, id_maquina, fk_componente FROM Componente
 	INNER JOIN Componente_Maquina ON Componente_Maquina.fk_componente = Componente.id_componente
 	INNER JOIN Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
@@ -178,6 +187,10 @@ SELECT nome_maquina, id_maquina, fk_componente FROM Componente
 SELECT nome_maquina, id_maquina, fk_componente FROM Componente_Maquina
 	INNER JOIN Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
 		WHERE id_maquina = 1;
+        
+SELECT id_empresa, id_maquina FROM Maquina
+	INNER JOIN empresa ON empresa.id_empresa = maquina.fk_empresa
+		WHERE nome_maquina = 'Desktop 1' and email_empresa = 'endryl@gmail.com' and senha_empresa = 12345678;
     
 
 /* para sql server - remoto - produção 

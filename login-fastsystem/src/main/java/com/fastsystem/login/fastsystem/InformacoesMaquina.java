@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class InformacoesMaquina {
 
@@ -46,6 +47,7 @@ public class InformacoesMaquina {
         inserirInformacoesProcessador(idMaquina, idEmpresa);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
+        JOptionPane.showMessageDialog(null, "Login efetuado com sucesso!", "Login autorizado", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void inserirInformacoesProcessador(Integer idMaquina, Integer idEmpresa) {
