@@ -2,6 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
+/* COMANDO JAR NO TERMINAL: 
+java -jar login-fastsystem-1.0-SNAPSHOT-jar-with-dependencies.jar */
+
 package com.fastsystem.login.fastsystem;
 
 import java.awt.Color;
@@ -45,7 +49,7 @@ public class Login extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon","Email de Usuário");
+        emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"/assets.icons/padlock.png","Email de Usuário");
         senhaField = new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),"padlock","Senha");
         jButton1 = new javax.swing.JButton();
         maquinaField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon","Nome da máquina");
@@ -156,7 +160,6 @@ public class Login extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,6 +169,7 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
+            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,7 +254,7 @@ public class Login extends javax.swing.JFrame {
                         loginGui.setLocation(p.x, p.y);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    };
                 }
             };
             JOptionPane.showMessageDialog(null, "Email ou senha inválidos! \nVerifique também se máquina está correta!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
