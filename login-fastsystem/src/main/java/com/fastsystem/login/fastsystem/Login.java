@@ -104,10 +104,8 @@ public class Login extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -141,7 +139,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        emailField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        emailField.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         emailField.setForeground(new java.awt.Color(102, 102, 102));
 
         senhaField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
