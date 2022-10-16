@@ -139,7 +139,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        emailField.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        emailField.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
         emailField.setForeground(new java.awt.Color(102, 102, 102));
 
         senhaField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
@@ -167,7 +167,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        maquinaField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        maquinaField.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
         maquinaField.setForeground(new java.awt.Color(102, 102, 102));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

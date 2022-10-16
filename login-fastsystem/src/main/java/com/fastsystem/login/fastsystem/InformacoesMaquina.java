@@ -81,11 +81,11 @@ public class InformacoesMaquina {
         //  Inserindo no campo o processador da máquina.
         banco.update(
                 "INSERT INTO Componente VALUES"
-                + "( null, '" + nome + "', " + isAtivo + ", '" + fabricante + "', '" + modelo + "', " + capacidade + ");"
+                + "('" + nome + "', '" + isAtivo + "', '" + fabricante + "', '" + modelo + "', " + capacidade + ");"
         );
         //  Puxando do banco a ID do componente que acabou de ser criado.
         maquinaInfo = banco.queryForObject(
-                "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
+                "SELECT id_componente FROM (SELECT TOP 1* FROM Componente ORDER BY id_componente DESC) A ORDER BY id_componente ASC;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
         );
         Integer idComponente = maquinaInfo.getIdComponente();
         // Tipo_Registro = 1 == GB
@@ -109,11 +109,11 @@ public class InformacoesMaquina {
         Long capacidade = looca.getMemoria().getTotal() / 1000000000;
 
         banco.update(
-                "INSERT INTO Componente (id_componente, nome_componente, is_ativo, capacidade_componente) VALUES "
-                + "( null, '" + nome + "', " + isAtivo + ", " + capacidade + ");"
+                "INSERT INTO Componente (nome_componente, is_ativo, capacidade_componente) VALUES "
+                + "('" + nome + "', '" + isAtivo + "', " + capacidade + ");"
         );
         maquinaInfo = banco.queryForObject(
-                "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
+                "SELECT id_componente FROM (SELECT TOP 1* FROM Componente ORDER BY id_componente DESC) A ORDER BY id_componente ASC;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
         );
         Integer idComponente = maquinaInfo.getIdComponente();
         // Tipo_Registro = 1 == GB
@@ -135,11 +135,11 @@ public class InformacoesMaquina {
         Long capacidade = looca.getGrupoDeDiscos().getTamanhoTotal() / 1000000000;
 
         banco.update(
-                "INSERT INTO Componente (id_componente, nome_componente, is_ativo, capacidade_componente) VALUES "
-                + "( null, '" + nome + "', " + isAtivo + ", " + capacidade + ");"
+                "INSERT INTO Componente (nome_componente, is_ativo, capacidade_componente) VALUES "
+                + "('" + nome + "', '" + isAtivo + "', " + capacidade + ");"
         );
         maquinaInfo = banco.queryForObject(
-                "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
+                "SELECT id_componente FROM (SELECT TOP 1* FROM Componente ORDER BY id_componente DESC) A ORDER BY id_componente ASC;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
         );
         Integer idComponente = maquinaInfo.getIdComponente();
         
