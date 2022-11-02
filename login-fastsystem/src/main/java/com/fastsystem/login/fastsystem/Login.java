@@ -5,8 +5,6 @@
 package com.fastsystem.login.fastsystem;
 
 import java.awt.Color;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.swing.JOptionPane;
@@ -214,24 +212,18 @@ public class Login extends javax.swing.JFrame {
         String email_usuario = String.valueOf(emailField.getText());
         String senha_usuario = String.valueOf(senhaField.getText());
         String maquina_usuario = String.valueOf(maquinaField.getText());
-
-        List loginSelect = banco.queryForList(
-                "SELECT id_empresa, id_maquina FROM Maquina\n"
+        
+        String selectRealizarLogin = "SELECT id_empresa, id_maquina FROM Maquina\n"
                 + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
                 + "WHERE nome_maquina = '" + maquina_usuario + "' "
                 + "and email_empresa = '" + email_usuario + "' "
-                + "and senha_empresa = '" + senha_usuario + "'; "
-        );
+                + "and senha_empresa = '" + senha_usuario + "'; ";
+
+        List loginSelect = banco.queryForList(selectRealizarLogin);
 
         if (!loginSelect.isEmpty()) {
             EmpresaMaquina login;
-            login = banco.queryForObject(
-                    "SELECT id_empresa, id_maquina FROM Maquina\n"
-                    + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
-                    + "WHERE nome_maquina = '" + maquina_usuario + "' "
-                    + "and email_empresa = '" + email_usuario + "' "
-                    + "and senha_empresa = '" + senha_usuario + "'; ",
-                    new BeanPropertyRowMapper<>(EmpresaMaquina.class));
+            login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
         } else {
             Point p = this.getLocation();
