@@ -18,39 +18,38 @@ public class InformacoesMaquina {
     DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     String dataFormatada = dataAtual.format(formatoData);
 
-    String informacoesSistema = String.format(
-            "\nSistema"
-            + "\nSistema Operacional: %s"
-            + "\nTempo de Atividade em segundos: %d",
-            looca.getSistema().getSistemaOperacional(),
-            looca.getSistema().getTempoDeAtividade()
-    );
-
-    /*
-    String informacoesProcessos = String.format(
-            "\nProcessos"
-            +"\nTotal de Processos: %d"
-            +"\nLista dos Processos Ativos: %s",
-            looca.getGrupoDeProcessos().getTotalProcessos(),
-            looca.getGrupoDeProcessos().getProcessos()
-    );
-     */
-    public void inserirInformacoesBanco(Integer idMaquina, Integer idEmpresa) {
-        String sistemaOperacional = looca.getSistema().getSistemaOperacional();
-        Long tempoAtividade = looca.getSistema().getTempoDeAtividade();
-        banco.update(
-                "UPDATE Maquina SET "
-                + "sistema_operacional_maquina = '"+sistemaOperacional+"', "
-                + "tempo_atividade_maquina = "+tempoAtividade
-                + " WHERE id_maquina = "+idMaquina+";"
+    /*public Integer componenteExiste(Integer idMaquina, Integer idEmpresa, String nomeComponente) {
+        EmpresaMaquina componente;
+        componente = banco.queryForObject(
+                "SELECT nome_componente, id_componente FROM Empresa\n"
+                + "INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa\n"
+                + "INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina\n"
+                + "INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente\n"
+                + "WHERE id_empresa = "+idEmpresa+" and id_maquina = "+idMaquina+" and nome_componente = '"+nomeComponente+"';",
+                new BeanPropertyRowMapper<>(EmpresaMaquina.class)
         );
-        inserirInformacoesProcessador(idMaquina, idEmpresa);
+        return componente.getIdComponente();
+    }*/
+    public void inserirInformacoesBanco(Integer idMaquina, Integer idEmpresa) {
+        inserirInformacoesSistema(idMaquina);
+        inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
         JOptionPane.showMessageDialog(null, "Login efetuado com sucesso!", "Login autorizado", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void inserirInformacoesProcessador(Integer idMaquina, Integer idEmpresa) {
+    public void inserirInformacoesSistema(Integer idMaquina) {
+        String sistemaOperacional = looca.getSistema().getSistemaOperacional();
+        Long tempoAtividade = looca.getSistema().getTempoDeAtividade();
+        banco.update(
+                "UPDATE Maquina SET "
+                + "sistema_operacional_maquina = '" + sistemaOperacional + "', "
+                + "tempo_atividade_maquina = " + tempoAtividade
+                + " WHERE id_maquina = " + idMaquina + ";"
+        );
+    }
+
+    public void inserirInformacoesProcessador(Integer idMaquina) {
         String nome = "Processador";
         Boolean isAtivo = true;
         String fabricante = looca.getProcessador().getFabricante();
@@ -58,16 +57,8 @@ public class InformacoesMaquina {
         Integer capacidade = 100;
         //Calculo para descobrir quanto está disponivel: (100 - looca.getProcessador().getUso());
 
-        /*List selectValidacaoExiste = banco.queryForList(
-                "SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa\n"
-                + "INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa\n"
-                + "INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina\n"
-                + "INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente\n"
-                + "WHERE id_empresa = " + idEmpresa + " and id_maquina = " + idMaquina + ";"
-        );
-
-        if (!selectValidacaoExiste.isEmpty()) {
-            //  Fazendo o update do campo caso o registro já exista.
+        /*Integer idComponenteBanco = componenteExiste(idMaquina, idEmpresa, nome);
+        if (idComponenteBanco != null) {
             banco.update(
                     "UPDATE Componente SET "
                     + "nome_componente = '"+nome+"', "
@@ -77,7 +68,7 @@ public class InformacoesMaquina {
                     + "capacidade_componente = "+capacidade+" "
                     + "WHERE nome_componente = 'teste';"
             );
-        } else {*/
+        } else {}*/
         //  Inserindo no campo o processador da máquina.
         banco.update(
                 "INSERT INTO Componente VALUES"
@@ -100,7 +91,6 @@ public class InformacoesMaquina {
                 + "( " + maquinaInfo.getIdComponente() + ", " + idMaquina + " );"
         );
         System.out.println("Processador cadastrado");
-        //}
     }
 
     public void inserirInformacoesMemoria(Integer idMaquina) {
@@ -128,25 +118,30 @@ public class InformacoesMaquina {
         );
         System.out.println("Memória cadastrada");
     }
-    
+
     public void inserirInformacoesDisco(Integer idMaquina) {
         String nome = "Disco";
         Boolean isAtivo = true;
-        Long capacidade = looca.getGrupoDeDiscos().getTamanhoTotal() / 1000000000;
+        Integer quantidade = looca.getGrupoDeDiscos().getQuantidadeDeDiscos();
 
-        banco.update(
-                "INSERT INTO Componente (id_componente, nome_componente, is_ativo, capacidade_componente) VALUES "
-                + "( null, '" + nome + "', " + isAtivo + ", " + capacidade + ");"
-        );
-        maquinaInfo = banco.queryForObject(
-                "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
-        );
-        Integer idComponente = maquinaInfo.getIdComponente();
-        
-        banco.update(
-                "INSERT INTO Componente_Maquina VALUES"
-                + "( " + idComponente + ", " + idMaquina + " );"
-        );
-        System.out.println("Disco cadastrado");
+        for ( int i = 1; i <= quantidade; i++ ) {
+            String modelo = looca.getGrupoDeDiscos().getDiscos().get(i -1).getModelo();
+            Long capacidade = looca.getGrupoDeDiscos().getDiscos().get(i -1).getTamanho() / 1000000000;
+
+            banco.update(
+                    "INSERT INTO Componente (id_componente, nome_componente, is_ativo, modelo_componente, capacidade_componente) VALUES "
+                    + "( null, '" + nome + " "+i+"', " + isAtivo + ", '" + modelo + "', " + capacidade + ");"
+            );
+            maquinaInfo = banco.queryForObject(
+                    "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
+            );
+            Integer idComponente = maquinaInfo.getIdComponente();
+
+            banco.update(
+                    "INSERT INTO Componente_Maquina VALUES"
+                    + "( " + idComponente + ", " + idMaquina + " );"
+            );
+        }
+        System.out.println(quantidade +" disco(s) cadastrado(s).");
     }
 }

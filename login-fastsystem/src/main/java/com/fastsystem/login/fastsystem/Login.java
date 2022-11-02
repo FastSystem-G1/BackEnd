@@ -222,20 +222,19 @@ public class Login extends javax.swing.JFrame {
                 + "and email_empresa = '" + email_usuario + "' "
                 + "and senha_empresa = '" + senha_usuario + "'; "
         );
-        
-        EmpresaMaquina login;
-        login = banco.queryForObject(
-                "SELECT id_empresa, id_maquina FROM Maquina\n"
-                        + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
-                        + "WHERE nome_maquina = '" + maquina_usuario + "' "
-                                + "and email_empresa = '" + email_usuario + "' "
-                                        + "and senha_empresa = '" + senha_usuario + "'; ",
-                new BeanPropertyRowMapper<>(EmpresaMaquina.class));
 
         if (!loginSelect.isEmpty()) {
+            EmpresaMaquina login;
+            login = banco.queryForObject(
+                    "SELECT id_empresa, id_maquina FROM Maquina\n"
+                    + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
+                    + "WHERE nome_maquina = '" + maquina_usuario + "' "
+                    + "and email_empresa = '" + email_usuario + "' "
+                    + "and senha_empresa = '" + senha_usuario + "'; ",
+                    new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
         } else {
-            /*Point p = this.getLocation();
+            Point p = this.getLocation();
             Login loginGui = this;
             new Thread() {
                 @Override
@@ -252,7 +251,7 @@ public class Login extends javax.swing.JFrame {
                         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            }.start();*/
+            }.start();
             JOptionPane.showMessageDialog(null, "Email ou senha inválidos! \nVerifique também se máquina está correta!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
             emailField.setText("");
             senhaField.setText("");

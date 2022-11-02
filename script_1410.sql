@@ -117,11 +117,19 @@ SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa
 	INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
     INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente;
     
-SELECT nome_empresa, nome_maquina, nome_componente FROM Empresa
+SELECT nome_empresa, nome_maquina, nome_componente, id_componente FROM Empresa
 	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa
 	INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
     INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente
 		WHERE id_empresa = 2 and id_maquina = 2;
+        
+SELECT nome_empresa, nome_maquina, nome_componente, id_componente FROM Empresa
+	INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa
+	INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina
+    INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente
+		WHERE id_empresa = 1 and id_maquina = 1 and nome_componente = 'Disco';
+        
+SELECT * FROM Componente;
         
 SELECT * FROM Registro;
         
