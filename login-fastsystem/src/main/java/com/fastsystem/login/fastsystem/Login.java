@@ -46,7 +46,6 @@ public class Login extends javax.swing.JFrame {
         emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon","Email de Usuário");
         senhaField = new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),"padlock","Senha");
         jButton1 = new javax.swing.JButton();
-        maquinaField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon","Nome da máquina");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(240, 240, 240));
@@ -103,7 +102,7 @@ public class Login extends javax.swing.JFrame {
         jButton2.setText("Sair");
         jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jButton2.setBorderPainted(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton2.setFocusPainted(false);
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -131,7 +130,7 @@ public class Login extends javax.swing.JFrame {
         jButton1.setText("Entrar");
         jButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jButton1.setBorderPainted(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.setFocusPainted(false);
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -147,9 +146,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        maquinaField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-        maquinaField.setForeground(new java.awt.Color(102, 102, 102));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -158,7 +154,6 @@ public class Login extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(maquinaField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(senhaField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -174,13 +169,11 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(senhaField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(maquinaField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addGap(5, 5, 5))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -211,20 +204,16 @@ public class Login extends javax.swing.JFrame {
 
         String email_usuario = String.valueOf(emailField.getText());
         String senha_usuario = String.valueOf(senhaField.getText());
-        String maquina_usuario = String.valueOf(maquinaField.getText());
-        
-        String selectRealizarLogin = "SELECT id_empresa, id_maquina FROM Maquina\n"
-                + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
-                + "WHERE nome_maquina = '" + maquina_usuario + "' "
-                + "and email_empresa = '" + email_usuario + "' "
-                + "and senha_empresa = '" + senha_usuario + "'; ";
+
+        String selectRealizarLogin = "SELECT id_maquina FROM Maquina \n"
+                + "WHERE email_maquina = '"+email_usuario+"' \n"
+                + "and senha_maquina = '"+senha_usuario+"';";
 
         List loginSelect = banco.queryForList(selectRealizarLogin);
 
-        if (!loginSelect.isEmpty()) {
-            EmpresaMaquina login;
+        if (!loginSelect.isEmpty()) {EmpresaMaquina login;
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
-            info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
+            info.inserirInformacoesBanco(login.getIdMaquina());
         } else {
             Point p = this.getLocation();
             Login loginGui = this;
@@ -244,10 +233,9 @@ public class Login extends javax.swing.JFrame {
                     }
                 }
             }.start();
-            JOptionPane.showMessageDialog(null, "Email ou senha inválidos! \nVerifique também se máquina está correta!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Email ou senha inválidos!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
             emailField.setText("");
             senhaField.setText("");
-            maquinaField.setText("");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -332,7 +320,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField maquinaField;
     private javax.swing.JTextField senhaField;
     // End of variables declaration//GEN-END:variables
 }

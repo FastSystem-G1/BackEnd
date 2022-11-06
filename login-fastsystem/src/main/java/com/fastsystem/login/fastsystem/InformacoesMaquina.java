@@ -18,19 +18,20 @@ public class InformacoesMaquina {
     DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     String dataFormatada = dataAtual.format(formatoData);
 
-    /*public Integer componenteExiste(Integer idMaquina, Integer idEmpresa, String nomeComponente) {
+    public Integer componenteExiste(Integer idMaquina, Integer idEmpresa, String nomeComponente) {
         EmpresaMaquina componente;
         componente = banco.queryForObject(
                 "SELECT nome_componente, id_componente FROM Empresa\n"
                 + "INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa\n"
                 + "INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina\n"
                 + "INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente\n"
-                + "WHERE id_empresa = "+idEmpresa+" and id_maquina = "+idMaquina+" and nome_componente = '"+nomeComponente+"';",
+                + "WHERE id_empresa = "+idEmpresa+" and id_maquina = "+idMaquina+" and nome_componente LIKE '"+nomeComponente+"%';",
                 new BeanPropertyRowMapper<>(EmpresaMaquina.class)
         );
         return componente.getIdComponente();
-    }*/
-    public void inserirInformacoesBanco(Integer idMaquina, Integer idEmpresa) {
+    }
+    
+    public void inserirInformacoesBanco(Integer idMaquina) {
         inserirInformacoesSistema(idMaquina);
         inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
