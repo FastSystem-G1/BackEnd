@@ -211,7 +211,8 @@ public class Login extends javax.swing.JFrame {
 
         List loginSelect = banco.queryForList(selectRealizarLogin);
 
-        if (!loginSelect.isEmpty()) {EmpresaMaquina login;
+        if (!loginSelect.isEmpty()) {
+            EmpresaMaquina login;
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
         } else {
