@@ -36,8 +36,7 @@ public class InformacoesMaquina {
             componente = banco.queryForObject(
                     "SELECT id_componente FROM Empresa\n"
                     + "INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa\n"
-                    + "INNER JOIN Componente_Maquina ON Maquina.id_maquina = Componente_Maquina.fk_maquina\n"
-                    + "INNER JOIN Componente ON Componente.id_componente = Componente_Maquina.fk_componente\n"
+                    + "INNER JOIN Componente ON Maquina.id_maquina = Componente.fk_maquina\n"
                     + "WHERE id_maquina = " + idMaquina + " and nome_componente LIKE '" + nomeComponente + "%';",
                     new BeanPropertyRowMapper<>(EmpresaMaquina.class)
             );
@@ -87,20 +86,21 @@ public class InformacoesMaquina {
                     + "is_ativo = " + isAtivo + ", "
                     + "fabricante_componente = '" + fabricante + "', "
                     + "modelo_componente = '" + modelo + "', "
-                    + "capacidade_componente = " + capacidade + " "
+                    + "capacidade_componente = " + capacidade + ", "
+                    + "fk_maquina = "+ idMaquina +" "
                     + "WHERE id_componente = " + idComponenteBanco + " "
                     + "AND nome_componente LIKE '" + nome + "%';"
             );
             banco.update(
                     "INSERT INTO Registro VALUES"
-                    + "( " + idComponenteBanco + ", " + idMaquina + ", '" + dataFormatada + "', " + looca.getProcessador().getUso() + ", " + 2 + " );"
+                    + "('"+dataFormatada+"', "+looca.getProcessador().getUso()+", 2, "+idComponenteBanco+");"
             );
             System.out.println("Processador atualizado");
         } else {
             //  Inserindo no campo o processador da máquina.
             banco.update(
                     "INSERT INTO Componente VALUES"
-                    + "( null, '" + nome + "', " + isAtivo + ", '" + fabricante + "', '" + modelo + "', " + capacidade + ");"
+                    + "( null, '" + nome + "', " + isAtivo + ", '" + fabricante + "', '" + modelo + "', " + capacidade + ", "+ idMaquina +");"
             );
             //  Puxando do banco a ID do componente que acabou de ser criado.
             maquinaInfo = banco.queryForObject(
@@ -111,12 +111,7 @@ public class InformacoesMaquina {
             // Tipo_Registro = 2 == %
             banco.update(
                     "INSERT INTO Registro VALUES"
-                    + "( " + idComponente + ", " + idMaquina + ", '" + dataFormatada + "', " + looca.getProcessador().getUso() + ", " + 2 + " );"
-            );
-            //  Inserindo na tabela associativa o ID do componente e o ID da máquina que este componente pertence.
-            banco.update(
-                    "INSERT INTO Componente_Maquina VALUES"
-                    + "( " + maquinaInfo.getIdComponente() + ", " + idMaquina + " );"
+                    + "('"+dataFormatada+"', "+looca.getProcessador().getUso()+", 2, "+idComponente+");"
             );
             System.out.println("Processador cadastrado");
         }
@@ -128,23 +123,25 @@ public class InformacoesMaquina {
         Long capacidade = looca.getMemoria().getTotal() / 1000000000;
 
         Integer idComponenteBanco = componenteExiste(idMaquina, nome);
+        
         if (idComponenteBanco != 0) {
             banco.update(
                     "UPDATE Componente SET "
-                    + "nome_componente = '" + nome + "', "
-                    + "is_ativo = " + isAtivo + ", "
-                    + "capacidade_componente = " + capacidade + " "
-                    + "WHERE id_componente = " + idComponenteBanco + " AND nome_componente LIKE '" + nome + "%';"
+                    + "nome_componente = '"+ nome+"', "
+                    + "is_ativo = "+isAtivo+", "
+                    + "capacidade_componente = "+capacidade+", "
+                    + "fk_maquina = "+idMaquina+" "
+                    + "WHERE id_componente = "+idComponenteBanco+" AND nome_componente LIKE '"+nome+"%';"
             );
             banco.update(
                     "INSERT INTO Registro VALUES"
-                    + "( " + idComponenteBanco + ", " + idMaquina + ", '" + dataFormatada + "', " + (looca.getMemoria().getEmUso() / 1000000000) + ", " + 1 + " );"
+                    + "('"+dataFormatada+"', "+(looca.getMemoria().getEmUso()/1000000000)+", 1, "+idComponenteBanco+");"
             );
             System.out.println("Memória atualizada");
         } else {
             banco.update(
-                    "INSERT INTO Componente (id_componente, nome_componente, is_ativo, capacidade_componente) VALUES "
-                    + "( null, '" + nome + "', " + isAtivo + ", " + capacidade + ");"
+                    "INSERT INTO Componente (id_componente, nome_componente, is_ativo, capacidade_componente, fk_maquina) VALUES "
+                    + "( null, '"+nome+"', "+isAtivo+", "+capacidade+", "+idMaquina+");"
             );
             maquinaInfo = banco.queryForObject(
                     "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
@@ -154,11 +151,7 @@ public class InformacoesMaquina {
             // Tipo_Registro = 2 == %
             banco.update(
                     "INSERT INTO Registro VALUES"
-                    + "( " + idComponente + ", " + idMaquina + ", '" + dataFormatada + "', " + (looca.getMemoria().getEmUso() / 1000000000) + ", " + 1 + " );"
-            );
-            banco.update(
-                    "INSERT INTO Componente_Maquina VALUES"
-                    + "( " + maquinaInfo.getIdComponente() + ", " + idMaquina + " );"
+                    + "('"+dataFormatada+"', "+(looca.getMemoria().getEmUso()/1000000000)+", 1, "+idComponente+");"
             );
             System.out.println("Memória cadastrada");
         }
@@ -170,28 +163,45 @@ public class InformacoesMaquina {
 
         for (int i = 1; i <= quantidade; i++) {
             String nome = "Disco " + i;
-            String modelo = looca.getGrupoDeDiscos().getDiscos().get(i - 1).getModelo();
-            Long capacidade = looca.getGrupoDeDiscos().getDiscos().get(i - 1).getTamanho() / 1000000000;
+            String modelo = looca.getGrupoDeDiscos().getDiscos().get(i-1).getModelo();
+            Long capacidade = looca.getGrupoDeDiscos().getVolumes().get(i-1).getTotal() / 1000000000;
+            Long uso = looca.getGrupoDeDiscos().getVolumes().get(i-1).getDisponivel() / 1000000000;
 
             Integer idComponenteBanco = componenteExiste(idMaquina, nome);
+            
             if (idComponenteBanco != 0) {
                 banco.update(
-                        "UPDATE Componente SET nome_componente = '"+nome+"', is_ativo = "+isAtivo+", modelo_componente = '"+modelo+"', capacidade_componente = "+capacidade+" "
-                        + "WHERE id_componente = "+idComponenteBanco+" AND nome_componente LIKE '"+nome+"%';"
+                        "UPDATE Componente SET "
+                        + "nome_componente = '"+nome+"', "
+                        + "is_ativo = "+isAtivo+", "
+                        + "modelo_componente = '"+modelo+"', "
+                        + "capacidade_componente = " + capacidade + ", "
+                        + "fk_maquina = "+ idMaquina +" "
+                        + "WHERE id_componente = "+idComponenteBanco+" "
+                        + "AND nome_componente LIKE '"+nome+"%';"
+                );
+                banco.update(
+                        "INSERT INTO Registro VALUES "
+                        + "('"+dataFormatada+"', "+uso+", 1, "+idComponenteBanco+");"
+                );
+                banco.update(
+                        "INSERT INTO Registro VALUES "
+                        + "('"+dataFormatada+"', "+uso+", 1, "+idComponenteBanco+");"
                 );
             } else {
                 banco.update(
-                        "INSERT INTO Componente (id_componente, nome_componente, is_ativo, modelo_componente, capacidade_componente) VALUES "
-                        + "( null, '" + nome + "', " + isAtivo + ", '" + modelo + "', " + capacidade + ");"
+                        "INSERT INTO Componente (id_componente, nome_componente, is_ativo, modelo_componente, capacidade_componente, fk_maquina) VALUES "
+                        + "( null, '"+nome+"', "+isAtivo+", '"+modelo+"', "+capacidade+", "+idMaquina+");"
                 );
                 maquinaInfo = banco.queryForObject(
                         "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
                 );
                 Integer idComponente = maquinaInfo.getIdComponente();
-
+                // Tipo_Registro = 1 == GB
+                // Tipo_Registro = 2 == %
                 banco.update(
-                        "INSERT INTO Componente_Maquina VALUES"
-                        + "( " + idComponente + ", " + idMaquina + " );"
+                        "INSERT INTO Registro VALUES "
+                        + "('"+dataFormatada+"', "+uso+", 1, "+idComponente+");"
                 );
             }
         }
