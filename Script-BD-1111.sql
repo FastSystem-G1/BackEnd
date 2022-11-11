@@ -121,8 +121,12 @@ SELECT id_componente, nome_componente FROM Empresa
         INNER JOIN Componente ON Maquina.id_maquina = Componente.fk_maquina
         WHERE id_maquina = 1;
         
+SELECT * FROM Maquina;
 SELECT * FROM Componente;
 SELECT * FROM Registro WHERE fk_componente = 3;
+DELETE FROM Registro WHERE fk_Componente = 1;
+DELETE FROM Registro WHERE fk_Componente = 2;
+DELETE FROM Registro WHERE fk_Componente = 3;
         
 UPDATE Componente SET 
 	nome_componente = 'Processadorrrrr', 

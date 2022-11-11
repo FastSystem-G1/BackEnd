@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
 
 public class InformacoesMaquina {
@@ -60,14 +62,21 @@ public class InformacoesMaquina {
     }
 
     public void inserirInformacoesSistema(Integer idMaquina) {
-        String sistemaOperacional = looca.getSistema().getSistemaOperacional();
-        Long tempoAtividade = looca.getSistema().getTempoDeAtividade();
-        banco.update(
-                "UPDATE Maquina SET "
-                + "sistema_operacional_maquina = '" + sistemaOperacional + "', "
-                + "tempo_atividade_maquina = " + tempoAtividade
-                + " WHERE id_maquina = " + idMaquina + ";"
-        );
+        Timer timer = new Timer();
+        TimerTask tarefa = new TimerTask() {
+            @Override
+            public void run() {
+                String sistemaOperacional = looca.getSistema().getSistemaOperacional();
+                Long tempoAtividade = looca.getSistema().getTempoDeAtividade();
+                banco.update(
+                        "UPDATE Maquina SET "
+                        + "sistema_operacional_maquina = '" + sistemaOperacional + "', "
+                        + "tempo_atividade_maquina = " + tempoAtividade
+                        + " WHERE id_maquina = " + idMaquina + ";"
+                );
+            }
+        };
+        timer.scheduleAtFixedRate(tarefa, 0, 5000);
     }
 
     public void inserirInformacoesProcessador(Integer idMaquina) {
@@ -79,6 +88,8 @@ public class InformacoesMaquina {
         //Calculo para descobrir quanto está disponivel: (100 - looca.getProcessador().getUso());
 
         Integer idComponenteBanco = componenteExiste(idMaquina, nome);
+        Integer idComponente;
+
         if (idComponenteBanco != 0) {
             banco.update(
                     "UPDATE Componente SET "
@@ -87,34 +98,36 @@ public class InformacoesMaquina {
                     + "fabricante_componente = '" + fabricante + "', "
                     + "modelo_componente = '" + modelo + "', "
                     + "capacidade_componente = " + capacidade + ", "
-                    + "fk_maquina = "+ idMaquina +" "
+                    + "fk_maquina = " + idMaquina + " "
                     + "WHERE id_componente = " + idComponenteBanco + " "
                     + "AND nome_componente LIKE '" + nome + "%';"
             );
-            banco.update(
-                    "INSERT INTO Registro VALUES"
-                    + "('"+dataFormatada+"', "+looca.getProcessador().getUso()+", 2, "+idComponenteBanco+");"
-            );
+            idComponente = idComponenteBanco;
             System.out.println("Processador atualizado");
         } else {
             //  Inserindo no campo o processador da máquina.
             banco.update(
                     "INSERT INTO Componente VALUES"
-                    + "( null, '" + nome + "', " + isAtivo + ", '" + fabricante + "', '" + modelo + "', " + capacidade + ", "+ idMaquina +");"
+                    + "( null, '" + nome + "', " + isAtivo + ", '" + fabricante + "', '" + modelo + "', " + capacidade + ", " + idMaquina + ");"
             );
             //  Puxando do banco a ID do componente que acabou de ser criado.
             maquinaInfo = banco.queryForObject(
                     "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
             );
-            Integer idComponente = maquinaInfo.getIdComponente();
-            // Tipo_Registro = 1 == GB
-            // Tipo_Registro = 2 == %
-            banco.update(
-                    "INSERT INTO Registro VALUES"
-                    + "('"+dataFormatada+"', "+looca.getProcessador().getUso()+", 2, "+idComponente+");"
-            );
+            idComponente = maquinaInfo.getIdComponente();
             System.out.println("Processador cadastrado");
         }
+        Timer timer = new Timer();
+        TimerTask tarefa = new TimerTask() {
+            @Override
+            public void run() {
+                banco.update(
+                        "INSERT INTO Registro VALUES"
+                        + "('" + dataFormatada + "', " + looca.getProcessador().getUso() + ", 2, " + idComponente + ");"
+                );
+            }
+        };
+        timer.scheduleAtFixedRate(tarefa, 0, 5000);
     }
 
     public void inserirInformacoesMemoria(Integer idMaquina) {
@@ -123,38 +136,43 @@ public class InformacoesMaquina {
         Long capacidade = looca.getMemoria().getTotal() / 1000000000;
 
         Integer idComponenteBanco = componenteExiste(idMaquina, nome);
-        
+        Integer idComponente;
+
         if (idComponenteBanco != 0) {
             banco.update(
                     "UPDATE Componente SET "
-                    + "nome_componente = '"+ nome+"', "
-                    + "is_ativo = "+isAtivo+", "
-                    + "capacidade_componente = "+capacidade+", "
-                    + "fk_maquina = "+idMaquina+" "
-                    + "WHERE id_componente = "+idComponenteBanco+" AND nome_componente LIKE '"+nome+"%';"
+                    + "nome_componente = '" + nome + "', "
+                    + "is_ativo = " + isAtivo + ", "
+                    + "capacidade_componente = " + capacidade + ", "
+                    + "fk_maquina = " + idMaquina + " "
+                    + "WHERE id_componente = " + idComponenteBanco + " AND nome_componente LIKE '" + nome + "%';"
             );
-            banco.update(
-                    "INSERT INTO Registro VALUES"
-                    + "('"+dataFormatada+"', "+(looca.getMemoria().getEmUso()/1000000000)+", 1, "+idComponenteBanco+");"
-            );
+            idComponente = idComponenteBanco;
             System.out.println("Memória atualizada");
         } else {
             banco.update(
                     "INSERT INTO Componente (id_componente, nome_componente, is_ativo, capacidade_componente, fk_maquina) VALUES "
-                    + "( null, '"+nome+"', "+isAtivo+", "+capacidade+", "+idMaquina+");"
+                    + "( null, '" + nome + "', " + isAtivo + ", " + capacidade + ", " + idMaquina + ");"
             );
             maquinaInfo = banco.queryForObject(
                     "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
             );
-            Integer idComponente = maquinaInfo.getIdComponente();
+            idComponente = maquinaInfo.getIdComponente();
             // Tipo_Registro = 1 == GB
             // Tipo_Registro = 2 == %
-            banco.update(
-                    "INSERT INTO Registro VALUES"
-                    + "('"+dataFormatada+"', "+(looca.getMemoria().getEmUso()/1000000000)+", 1, "+idComponente+");"
-            );
             System.out.println("Memória cadastrada");
         }
+        Timer timer = new Timer();
+        TimerTask tarefa = new TimerTask() {
+            @Override
+            public void run() {
+                banco.update(
+                        "INSERT INTO Registro VALUES"
+                        + "('" + dataFormatada + "', " + (looca.getMemoria().getEmUso() / 1000000000) + ", 1, " + idComponente + ");"
+                );
+            }
+        };
+        timer.scheduleAtFixedRate(tarefa, 0, 5000);
     }
 
     public void inserirInformacoesDisco(Integer idMaquina) {
@@ -163,47 +181,46 @@ public class InformacoesMaquina {
 
         for (int i = 1; i <= quantidade; i++) {
             String nome = "Disco " + i;
-            String modelo = looca.getGrupoDeDiscos().getDiscos().get(i-1).getModelo();
-            Long capacidade = looca.getGrupoDeDiscos().getVolumes().get(i-1).getTotal() / 1000000000;
-            Long uso = looca.getGrupoDeDiscos().getVolumes().get(i-1).getDisponivel() / 1000000000;
+            String modelo = looca.getGrupoDeDiscos().getDiscos().get(i - 1).getModelo();
+            Long capacidade = looca.getGrupoDeDiscos().getVolumes().get(i - 1).getTotal() / 1000000000;
+            Long uso = looca.getGrupoDeDiscos().getVolumes().get(i - 1).getDisponivel() / 1000000000;
 
             Integer idComponenteBanco = componenteExiste(idMaquina, nome);
-            
+            Integer idComponente;
+
             if (idComponenteBanco != 0) {
                 banco.update(
                         "UPDATE Componente SET "
-                        + "nome_componente = '"+nome+"', "
-                        + "is_ativo = "+isAtivo+", "
-                        + "modelo_componente = '"+modelo+"', "
+                        + "nome_componente = '" + nome + "', "
+                        + "is_ativo = " + isAtivo + ", "
+                        + "modelo_componente = '" + modelo + "', "
                         + "capacidade_componente = " + capacidade + ", "
-                        + "fk_maquina = "+ idMaquina +" "
-                        + "WHERE id_componente = "+idComponenteBanco+" "
-                        + "AND nome_componente LIKE '"+nome+"%';"
+                        + "fk_maquina = " + idMaquina + " "
+                        + "WHERE id_componente = " + idComponenteBanco + " "
+                        + "AND nome_componente LIKE '" + nome + "%';"
                 );
-                banco.update(
-                        "INSERT INTO Registro VALUES "
-                        + "('"+dataFormatada+"', "+uso+", 1, "+idComponenteBanco+");"
-                );
-                banco.update(
-                        "INSERT INTO Registro VALUES "
-                        + "('"+dataFormatada+"', "+uso+", 1, "+idComponenteBanco+");"
-                );
+                idComponente = idComponenteBanco;
             } else {
                 banco.update(
                         "INSERT INTO Componente (id_componente, nome_componente, is_ativo, modelo_componente, capacidade_componente, fk_maquina) VALUES "
-                        + "( null, '"+nome+"', "+isAtivo+", '"+modelo+"', "+capacidade+", "+idMaquina+");"
+                        + "( null, '" + nome + "', " + isAtivo + ", '" + modelo + "', " + capacidade + ", " + idMaquina + ");"
                 );
                 maquinaInfo = banco.queryForObject(
                         "SELECT id_componente FROM Componente ORDER BY id_componente DESC LIMIT 1;", new BeanPropertyRowMapper<>(EmpresaMaquina.class)
                 );
-                Integer idComponente = maquinaInfo.getIdComponente();
-                // Tipo_Registro = 1 == GB
-                // Tipo_Registro = 2 == %
-                banco.update(
-                        "INSERT INTO Registro VALUES "
-                        + "('"+dataFormatada+"', "+uso+", 1, "+idComponente+");"
-                );
+                idComponente = maquinaInfo.getIdComponente();
             }
+            Timer timer = new Timer();
+            TimerTask tarefa = new TimerTask() {
+                @Override
+                public void run() {
+                    banco.update(
+                            "INSERT INTO Registro VALUES "
+                            + "('" + dataFormatada + "', " + uso + ", 1, " + idComponente + ");"
+                    );
+                }
+            };
+            timer.scheduleAtFixedRate(tarefa, 0, 5000);
         }
         System.out.println(quantidade + " disco(s) cadastrado(s).");
     }
