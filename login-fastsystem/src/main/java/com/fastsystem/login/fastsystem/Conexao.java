@@ -16,7 +16,7 @@ public class Conexao {
         dataSource.setUsername("root");
         //Se estiver na faculdade mudar a senha para "sptech" ou "spt3ch".
         // dataSource.setPassword("sptech");
-        dataSource.setPassword("#Ef-44717959884");
+        dataSource.setPassword("");
 
         this.connection = new JdbcTemplate(dataSource);
     }

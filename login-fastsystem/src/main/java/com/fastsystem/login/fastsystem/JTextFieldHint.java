@@ -32,7 +32,7 @@ public class JTextFieldHint extends JTextField implements FocusListener {
 
     public JTextFieldHint(JTextField jtf, String icon, String hint) {
         this.jtf = jtf;
-        ImageIcon img1 = new ImageIcon("icons/"+icon+".png");
+        ImageIcon img1 = new ImageIcon("src/main/resources/assets/"+icon+".png");
         setIcon(img1);
         this.hint = hint;
 
