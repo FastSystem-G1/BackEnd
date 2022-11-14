@@ -16,9 +16,11 @@ public class InformacoesMaquina {
     Conexao con = new Conexao();
     JdbcTemplate banco = con.getConnection();
     EmpresaMaquina maquinaInfo;
+    
     LocalDateTime dataAtual = LocalDateTime.now();
     DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     String dataFormatada = dataAtual.format(formatoData);
+    Long tempoAtividade;
 
     /*public void teste() {
         System.out.println(looca.getGrupoDeProcessos().getProcessos());
@@ -62,12 +64,13 @@ public class InformacoesMaquina {
     }
 
     public void inserirInformacoesSistema(Integer idMaquina) {
+        String sistemaOperacional = looca.getSistema().getSistemaOperacional();
+        tempoAtividade = looca.getSistema().getTempoDeAtividade();
         Timer timer = new Timer();
         TimerTask tarefa = new TimerTask() {
             @Override
             public void run() {
-                String sistemaOperacional = looca.getSistema().getSistemaOperacional();
-                Long tempoAtividade = looca.getSistema().getTempoDeAtividade();
+                tempoAtividade = looca.getSistema().getTempoDeAtividade();
                 banco.update(
                         "UPDATE Maquina SET "
                         + "sistema_operacional_maquina = '" + sistemaOperacional + "', "
@@ -121,6 +124,7 @@ public class InformacoesMaquina {
         TimerTask tarefa = new TimerTask() {
             @Override
             public void run() {
+                dataAtual = LocalDateTime.now();
                 banco.update(
                         "INSERT INTO Registro VALUES"
                         + "('" + dataFormatada + "', " + looca.getProcessador().getUso() + ", 2, " + idComponente + ");"
@@ -166,6 +170,7 @@ public class InformacoesMaquina {
         TimerTask tarefa = new TimerTask() {
             @Override
             public void run() {
+                dataAtual = LocalDateTime.now();
                 banco.update(
                         "INSERT INTO Registro VALUES"
                         + "('" + dataFormatada + "', " + (looca.getMemoria().getEmUso() / 1000000000) + ", 1, " + idComponente + ");"
@@ -184,6 +189,10 @@ public class InformacoesMaquina {
             String modelo = looca.getGrupoDeDiscos().getDiscos().get(i - 1).getModelo();
             Long capacidade = looca.getGrupoDeDiscos().getVolumes().get(i - 1).getTotal() / 1000000000;
             Long uso = looca.getGrupoDeDiscos().getVolumes().get(i - 1).getDisponivel() / 1000000000;
+            
+            if (capacidade == 0) {
+                capacidade = looca.getGrupoDeDiscos().getDiscos().get(i).getTamanho();
+            }
 
             Integer idComponenteBanco = componenteExiste(idMaquina, nome);
             Integer idComponente;
@@ -214,6 +223,7 @@ public class InformacoesMaquina {
             TimerTask tarefa = new TimerTask() {
                 @Override
                 public void run() {
+                    dataAtual = LocalDateTime.now();
                     banco.update(
                             "INSERT INTO Registro VALUES "
                             + "('" + dataFormatada + "', " + uso + ", 1, " + idComponente + ");"
