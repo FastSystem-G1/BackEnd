@@ -191,7 +191,7 @@ public class InformacoesMaquina {
             Long uso = looca.getGrupoDeDiscos().getVolumes().get(i - 1).getDisponivel() / 1000000000;
             
             if (capacidade == 0) {
-                capacidade = looca.getGrupoDeDiscos().getDiscos().get(i).getTamanho();
+                capacidade = looca.getGrupoDeDiscos().getDiscos().get(i - 1).getTamanho() / 1000000000;
             }
 
             Integer idComponenteBanco = componenteExiste(idMaquina, nome);
