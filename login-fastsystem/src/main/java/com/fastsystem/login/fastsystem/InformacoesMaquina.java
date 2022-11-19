@@ -22,9 +22,9 @@ public class InformacoesMaquina {
     String dataFormatada = dataAtual.format(formatoData);
     Long tempoAtividade;
 
-    /*public void teste() {
+   /* public void teste() {
         System.out.println(looca.getGrupoDeProcessos().getProcessos());
-        /*for ( int i = 0; i < looca.getGrupoDeProcessos().getTotalProcessos(); i++ ) {
+        for ( int i = 0; i < looca.getGrupoDeProcessos().getTotalProcessos(); i++ ) {
             if ( looca.getGrupoDeProcessos().getProcessos().get(i).getNome().equalsIgnoreCase("chrome") ) {
                 System.out.println(String.format(
                         "Nome do processo: %s", 
@@ -49,12 +49,29 @@ public class InformacoesMaquina {
             return 0;
         }
     }
+    
+    public Integer processoExiste(Integer idMaquina, String nomeProcesso) {
+        try {
+            EmpresaMaquina processo;
+            processo = banco.queryForObject(
+                    "SELECT id_registro_processo FROM Empresa\n"
+                    + "INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa\n"
+                    + "INNER JOIN Registro_Processo ON Maquina.id_maquina = Registro_Processo.fk_maquina\n"
+                    + "WHERE id_maquina = " + idMaquina + " and nome_processo LIKE '" + nomeProcesso + "%';",
+                    new BeanPropertyRowMapper<>(EmpresaMaquina.class)
+            );
+            return processo.getIdProcesso();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 
     public void inserirInformacoesBanco(Integer idMaquina) {
         inserirInformacoesSistema(idMaquina);
         inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
+        inserirInformacoesProcesso(idMaquina);
         JOptionPane.showMessageDialog(
                 null,
                 "Login efetuado com sucesso!",
@@ -125,6 +142,7 @@ public class InformacoesMaquina {
             @Override
             public void run() {
                 dataAtual = LocalDateTime.now();
+                dataFormatada = dataAtual.format(formatoData);
                 banco.update(
                         "INSERT INTO Registro VALUES"
                         + "('" + dataFormatada + "', " + looca.getProcessador().getUso() + ", 2, " + idComponente + ");"
@@ -171,6 +189,7 @@ public class InformacoesMaquina {
             @Override
             public void run() {
                 dataAtual = LocalDateTime.now();
+                dataFormatada = dataAtual.format(formatoData);
                 banco.update(
                         "INSERT INTO Registro VALUES"
                         + "('" + dataFormatada + "', " + (looca.getMemoria().getEmUso() / 1000000000) + ", 1, " + idComponente + ");"
@@ -224,6 +243,7 @@ public class InformacoesMaquina {
                 @Override
                 public void run() {
                     dataAtual = LocalDateTime.now();
+                    dataFormatada = dataAtual.format(formatoData);
                     banco.update(
                             "INSERT INTO Registro VALUES "
                             + "('" + dataFormatada + "', " + uso + ", 1, " + idComponente + ");"
@@ -234,4 +254,27 @@ public class InformacoesMaquina {
         }
         System.out.println(quantidade + " disco(s) cadastrado(s).");
     }
+    
+    public void inserirInformacoesProcesso(Integer idMaquina) {
+         Integer quantidade = looca.getGrupoDeProcessos().getTotalProcessos();
+
+         try {
+             banco.update(
+               "DELETE FROM Registro_Processo WHERE fk_maquina = " + idMaquina + ";"
+            );
+         }catch(Exception e) {
+         }
+            
+         for(int i = 0; i < quantidade; i++){
+                String nome = looca.getGrupoDeProcessos().getProcessos().get(i).getNome();
+                dataAtual = LocalDateTime.now();
+                dataFormatada = dataAtual.format(formatoData);
+                banco.update(
+                        "INSERT INTO Registro_Processo (id_registro_processo, nome_processo, data_hora, is_autorizado, fk_maquina) VALUES "
+                        + "( null, '" + nome + "', '" + dataFormatada + "', " + false + "," + idMaquina + ");"
+                );
+            }
+         System.out.println(quantidade + " processo(s) cadastrado(s).");
+    }
+    
 }

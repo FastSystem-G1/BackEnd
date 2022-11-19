@@ -44,8 +44,8 @@ public class Login extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon","Email de Usuário");
-        senhaField = new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),"padlock","Senha");
+        emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon"," Email");
+        senhaField = new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),"padlock"," Senha");
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -117,7 +117,7 @@ public class Login extends javax.swing.JFrame {
         jButton2.setText("Sair");
         jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jButton2.setBorderPainted(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setFocusPainted(false);
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -145,7 +145,7 @@ public class Login extends javax.swing.JFrame {
         jButton1.setText("Entrar");
         jButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jButton1.setBorderPainted(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setFocusPainted(false);
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -225,11 +225,14 @@ public class Login extends javax.swing.JFrame {
                 + "and senha_maquina = '"+senha_usuario+"';";
 
         List loginSelect = banco.queryForList(selectRealizarLogin);
+       
 
         if (!loginSelect.isEmpty()) {
             EmpresaMaquina login;
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
+            System.out.println("Total de processos abertos: " + info.looca.getGrupoDeProcessos().getTotalProcessos());
+            
         } else {
             Point p = this.getLocation();
             Login loginGui = this;

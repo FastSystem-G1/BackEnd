@@ -216,7 +216,7 @@
             </Property>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Default Cursor"/>
+              <Color id="Hand Cursor"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
@@ -236,7 +236,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),&quot;user-icon&quot;,&quot;Email de Usu&#xe1;rio&quot;);"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),&quot;user-icon&quot;,&quot; Email&quot;);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="senhaField">
@@ -249,7 +249,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),&quot;padlock&quot;,&quot;Senha&quot;);"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),&quot;padlock&quot;,&quot; Senha&quot;);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="jButton1">
@@ -271,7 +271,7 @@
             </Property>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Default Cursor"/>
+              <Color id="Hand Cursor"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
