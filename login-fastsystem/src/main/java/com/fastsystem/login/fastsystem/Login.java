@@ -9,9 +9,11 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.swing.JOptionPane;
 import java.awt.Point;
+import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 /**
@@ -49,7 +51,6 @@ public class Login extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(240, 240, 240));
         setMinimumSize(new java.awt.Dimension(400, 410));
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(400, 316));
@@ -105,7 +106,6 @@ public class Login extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60)));
         jPanel2.setForeground(new java.awt.Color(222, 222, 222));
 
-        jLabel4.setBackground(new java.awt.Color(240, 240, 240));
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(91, 95, 99));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -221,19 +221,25 @@ public class Login extends javax.swing.JFrame {
         String senha_usuario = String.valueOf(senhaField.getText());
 
         String selectRealizarLogin = "SELECT id_maquina FROM Maquina \n"
-                + "WHERE email_maquina = '"+email_usuario+"' \n"
-                + "and senha_maquina = '"+senha_usuario+"';";
+                + "WHERE email_maquina = '" + email_usuario + "' \n"
+                + "and senha_maquina = '" + senha_usuario + "';";
 
         List loginSelect = banco.queryForList(selectRealizarLogin);
-       
+
+        String pathLogLoginError = "logs/logs-error-login.txt";
+        String pathLogLoginSucess = "logs/logs-sucess-login.txt";
 
         if (!loginSelect.isEmpty()) {
+            Logs.escreverTexto(pathLogLoginSucess, "\n Login realizado com sucesso!!!"
+                    + "\n Data e hora: ");
             EmpresaMaquina login;
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
             System.out.println("Total de processos abertos: " + info.looca.getGrupoDeProcessos().getTotalProcessos());
-            
+
         } else {
+            Logs.escreverTexto(pathLogLoginError, "\n Erro ao realizar Login!!!"
+                    + "\n Data e hora: ");
             Point p = this.getLocation();
             Login loginGui = this;
             new Thread() {
@@ -299,7 +305,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException, InterruptedException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -329,6 +335,16 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
+
+        JSONObject json = new JSONObject();
+        InformacoesMaquina info = new InformacoesMaquina();
+        System.out.println("TESTE");
+
+        if (info.looca.getProcessador().getUso() > 40) {
+            System.out.println("ENTREI");
+            json.put("text", "FUDEO FUDEO");
+            Slack.sendMessage(json);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

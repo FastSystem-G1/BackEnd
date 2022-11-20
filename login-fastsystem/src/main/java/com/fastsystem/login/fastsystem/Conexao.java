@@ -10,7 +10,7 @@ public class Conexao {
         BasicDataSource dataSource = new BasicDataSource();
         
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/FastSystem?useTimezone=true&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/fastsystem?useTimezone=true&serverTimezone=UTC");
         //Se estiver na faculdade mudar o Username para "aluno" ou manter "root".
         // dataSource.setUsername("aluno");
         dataSource.setUsername("root");
