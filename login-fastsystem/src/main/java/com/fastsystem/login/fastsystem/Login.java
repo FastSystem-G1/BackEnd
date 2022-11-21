@@ -9,11 +9,11 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.swing.JOptionPane;
 import java.awt.Point;
-import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.JSONObject;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 /**
@@ -236,7 +236,28 @@ public class Login extends javax.swing.JFrame {
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
             System.out.println("Total de processos abertos: " + info.looca.getGrupoDeProcessos().getTotalProcessos());
-
+            
+            Timer timer = new Timer();
+            TimerTask tarefa = new TimerTask() {
+                @Override
+                public void run() {
+                    if (info.looca.getProcessador().getUso() > 80) {
+                        System.out.println("ENTREI");
+                        SlackAlert.sendMessage("Alerta de alto risco ao uso da CPU!!!\n "
+                                + info.looca.getProcessador().getUso()
+                                + "% de CPU em uso."
+                        );
+                    }
+                    long porcentagemUso = (info.looca.getMemoria().getEmUso() * 100) / info.looca.getMemoria().getTotal();
+                    if (porcentagemUso > 80) {
+                        SlackAlert.sendMessage("Alerta de risco ao alto uso de MEMÓRIA!!!\n "
+                                + info.looca.getMemoria().getEmUso()
+                                + "% de MEMÓRIA em uso."
+                        );
+                    }
+                }
+            };
+            timer.scheduleAtFixedRate(tarefa, 0, 5000);
         } else {
             Logs.escreverTexto(pathLogLoginError, "\n Erro ao realizar Login!!!"
                     + "\n Data e hora: ");
@@ -305,7 +326,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws IOException, InterruptedException {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -335,16 +356,6 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
-
-        JSONObject json = new JSONObject();
-        InformacoesMaquina info = new InformacoesMaquina();
-        System.out.println("TESTE");
-
-        if (info.looca.getProcessador().getUso() > 40) {
-            System.out.println("ENTREI");
-            json.put("text", "FUDEO FUDEO");
-            Slack.sendMessage(json);
-        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

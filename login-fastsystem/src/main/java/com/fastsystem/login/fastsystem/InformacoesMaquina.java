@@ -22,18 +22,6 @@ public class InformacoesMaquina {
     String dataFormatada = dataAtual.format(formatoData);
     Long tempoAtividade;
 
-   /* public void teste() {
-        System.out.println(looca.getGrupoDeProcessos().getProcessos());
-        for ( int i = 0; i < looca.getGrupoDeProcessos().getTotalProcessos(); i++ ) {
-            if ( looca.getGrupoDeProcessos().getProcessos().get(i).getNome().equalsIgnoreCase("chrome") ) {
-                System.out.println(String.format(
-                        "Nome do processo: %s", 
-                        looca.getGrupoDeProcessos().getProcessos().get(i).getNome()
-                    )
-                );
-            }
-        }
-    }*/
     public Integer componenteExiste(Integer idMaquina, String nomeComponente) {
         try {
             EmpresaMaquina componente;
@@ -71,7 +59,7 @@ public class InformacoesMaquina {
         inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
-        inserirInformacoesProcesso(idMaquina);
+        //inserirInformacoesProcesso(idMaquina);
         JOptionPane.showMessageDialog(
                 null,
                 "Login efetuado com sucesso!",
@@ -186,13 +174,15 @@ public class InformacoesMaquina {
         }
         Timer timer = new Timer();
         TimerTask tarefa = new TimerTask() {
+            Long emUso;
             @Override
             public void run() {
                 dataAtual = LocalDateTime.now();
                 dataFormatada = dataAtual.format(formatoData);
+                emUso = looca.getMemoria().getEmUso() / 1000000000;
                 banco.update(
                         "INSERT INTO Registro VALUES"
-                        + "('" + dataFormatada + "', " + (looca.getMemoria().getEmUso() / 1000000000) + ", 1, " + idComponente + ");"
+                        + "('" + dataFormatada + "', " + emUso + ", 1, " + idComponente + ");"
                 );
             }
         };
