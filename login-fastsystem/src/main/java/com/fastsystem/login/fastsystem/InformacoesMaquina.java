@@ -248,22 +248,24 @@ public class InformacoesMaquina {
     public void inserirInformacoesProcesso(Integer idMaquina) {
          Integer quantidade = looca.getGrupoDeProcessos().getTotalProcessos();
 
-         try {
-             banco.update(
-               "DELETE FROM Registro_Processo WHERE fk_maquina = " + idMaquina + ";"
+        try {
+            banco.update(
+                    "DELETE FROM Registro_Processo WHERE fk_maquina = " + idMaquina + ";"
             );
-         }catch(Exception e) {
-         }
+        } catch (Exception e) {}
             
-         for(int i = 0; i < quantidade; i++){
+        dataAtual = LocalDateTime.now();
+        dataFormatada = dataAtual.format(formatoData);
+        try {
+            for (int i = 0; i < quantidade; i++) {
                 String nome = looca.getGrupoDeProcessos().getProcessos().get(i).getNome();
-                dataAtual = LocalDateTime.now();
-                dataFormatada = dataAtual.format(formatoData);
                 banco.update(
                         "INSERT INTO Registro_Processo (id_registro_processo, nome_processo, data_hora, is_autorizado, fk_maquina) VALUES "
                         + "( null, '" + nome + "', '" + dataFormatada + "', " + false + "," + idMaquina + ");"
                 );
             }
+        } catch(Exception e) {}
+        
          System.out.println(quantidade + " processo(s) cadastrado(s).");
     }
     

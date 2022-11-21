@@ -150,9 +150,8 @@ SELECT nome_componente, modelo_componente, capacidade_componente FROM Empresa
 SELECT * FROM Maquina;
 SELECT * FROM Componente;
 SELECT * FROM Registro WHERE fk_componente = 4;
-DELETE FROM Registro WHERE fk_Componente = 1;
-DELETE FROM Registro WHERE fk_Componente = 2;
-DELETE FROM Registro WHERE fk_Componente = 3;
+
+SELECT * FROM Registro_Processo GROUP BY nome_processo;
         
 UPDATE Componente SET 
 	nome_componente = 'Processadorrrrr', 
