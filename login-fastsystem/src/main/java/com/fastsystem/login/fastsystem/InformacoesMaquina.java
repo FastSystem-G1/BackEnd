@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
@@ -37,29 +36,21 @@ public class InformacoesMaquina {
             return 0;
         }
     }
-    
-    public Integer processoExiste(Integer idMaquina, String nomeProcesso) {
-        try {
-            EmpresaMaquina processo;
-            processo = banco.queryForObject(
-                    "SELECT id_registro_processo FROM Empresa\n"
-                    + "INNER JOIN Maquina ON Empresa.id_empresa = maquina.fk_empresa\n"
-                    + "INNER JOIN Registro_Processo ON Maquina.id_maquina = Registro_Processo.fk_maquina\n"
-                    + "WHERE id_maquina = " + idMaquina + " and nome_processo LIKE '" + nomeProcesso + "%';",
-                    new BeanPropertyRowMapper<>(EmpresaMaquina.class)
-            );
-            return processo.getIdProcesso();
-        } catch (Exception e) {
-            return 0;
-        }
-    }
 
     public void inserirInformacoesBanco(Integer idMaquina) {
-        inserirInformacoesSistema(idMaquina);
+        Timer timer = new Timer();
+        TimerTask tarefa = new TimerTask() {
+            @Override
+            public void run() {
+                inserirInformacoesProcesso(idMaquina);
+                inserirInformacoesSistema(idMaquina);
+            }
+        };
+        timer.scheduleAtFixedRate(tarefa, 0, 10000);
+        
         inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
-        inserirInformacoesProcesso(idMaquina);
         JOptionPane.showMessageDialog(
                 null,
                 "Login efetuado com sucesso!",
@@ -71,20 +62,12 @@ public class InformacoesMaquina {
     public void inserirInformacoesSistema(Integer idMaquina) {
         String sistemaOperacional = looca.getSistema().getSistemaOperacional();
         tempoAtividade = looca.getSistema().getTempoDeAtividade();
-        Timer timer = new Timer();
-        TimerTask tarefa = new TimerTask() {
-            @Override
-            public void run() {
-                tempoAtividade = looca.getSistema().getTempoDeAtividade();
-                banco.update(
-                        "UPDATE Maquina SET "
-                        + "sistema_operacional_maquina = '" + sistemaOperacional + "', "
-                        + "tempo_atividade_maquina = " + tempoAtividade
-                        + " WHERE id_maquina = " + idMaquina + ";"
-                );
-            }
-        };
-        timer.scheduleAtFixedRate(tarefa, 0, 5000);
+        banco.update(
+                "UPDATE Maquina SET "
+                + "sistema_operacional_maquina = '" + sistemaOperacional + "', "
+                + "tempo_atividade_maquina = " + tempoAtividade
+                + " WHERE id_maquina = " + idMaquina + ";"
+        );
     }
 
     public void inserirInformacoesProcessador(Integer idMaquina) {
@@ -252,11 +235,13 @@ public class InformacoesMaquina {
             banco.update(
                 "DELETE FROM Registro_Processo WHERE fk_maquina = " + idMaquina + ";"
             );
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            System.out.println("A máquina não possuí processos salvos.");
+        }
             
         dataAtual = LocalDateTime.now();
         dataFormatada = dataAtual.format(formatoData);
-        System.out.println("Entrei nos processos");
+        Integer quantidadeProcessos = 0;
         try {
             for (int i = 0; i < quantidade; i++) {
                 String nome = looca.getGrupoDeProcessos().getProcessos().get(i).getNome();
@@ -264,13 +249,15 @@ public class InformacoesMaquina {
                         "INSERT INTO Registro_Processo (id_registro_processo, nome_processo, data_hora, is_autorizado, fk_maquina) VALUES "
                         + "( null, '" + nome + "', '" + dataFormatada + "', " + false + "," + idMaquina + ");"
                 );
+                quantidadeProcessos++;
             }
-            System.out.println("Processos cadastrados com sucesso.");
+            System.out.println(quantidadeProcessos+" de Processos cadastrados com sucesso.");
         } catch(Exception e) {
-            System.out.println("Deu exception, mas segue o jogo.");
+            System.out.println(
+                    "\nQuantidade de processos salvos no banco até a exception: "+quantidadeProcessos+"."+
+                    "\nQuantidade de processos inicial ao todo: "+quantidade+"."
+            );
         }
-        
-         System.out.println(quantidade + " processo(s) cadastrado(s).");
     }
     
 }

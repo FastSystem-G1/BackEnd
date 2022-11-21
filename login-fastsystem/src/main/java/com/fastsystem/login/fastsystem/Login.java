@@ -72,7 +72,6 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(1, 14, 60));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60)));
-        jPanel1.setForeground(new java.awt.Color(222, 222, 222));
         jPanel1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 80));
 
@@ -104,7 +103,6 @@ public class Login extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60)));
-        jPanel2.setForeground(new java.awt.Color(222, 222, 222));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(91, 95, 99));
@@ -235,7 +233,6 @@ public class Login extends javax.swing.JFrame {
             EmpresaMaquina login;
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
-            System.out.println("Total de processos abertos: " + info.looca.getGrupoDeProcessos().getTotalProcessos());
             
             Timer timer = new Timer();
             TimerTask tarefa = new TimerTask() {

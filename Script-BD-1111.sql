@@ -1,7 +1,7 @@
 CREATE DATABASE FastSystem;
 USE FastSystem;
 
-DROP DATABASE FastSystem;
+-- DROP DATABASE FastSystem;
 
 CREATE TABLE Empresa(
 id_empresa INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -39,19 +39,9 @@ senha_maquina VARCHAR(45),
 FOREIGN KEY(fk_empresa) REFERENCES Empresa(id_empresa)
 )AUTO_INCREMENT = 0;
 
-CREATE TABLE Categoria_App(
-id_categoria INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-nome_categoria VARCHAR(45)
-);
-
 CREATE TABLE App(
 id_app INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-nome_app VARCHAR(60),
-funcao VARCHAR(45),
-prioridade INT,
-tamanho_gigabytes DOUBLE,
-fk_categoria INT,
-FOREIGN KEY (fk_categoria) REFERENCES Categoria_App(id_categoria)
+nome_app VARCHAR(60)
 )AUTO_INCREMENT = 1000;
 
 CREATE TABLE App_Empresa(
@@ -108,48 +98,24 @@ INSERT INTO Tipo_Registro VALUES
 ( null, 'GB' ),
 ( null, '%' );
 
-SELECT * FROM Empresa;
-SELECT * FROM Funcionario;
-DESC Funcionario;
-INSERT INTO Funcionario VALUES 
-(null, 1, 'Endryl', 1, 12345678912, 'endryl@gmail.com', 12345678, '942518747'),
-(null, 2, 'Felipe', 1, 98765432112, 'felipe@gmail.com', 12345678, '965321547');
-
 -- Faça esses selects
-SELECT * FROM Maquina
-INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa
-WHERE id_empresa = 2;
+SELECT * FROM Maquina;
 
 SELECT id_componente FROM Empresa
 		INNER JOIN Maquina ON Empresa.id_empresa = Maquina.fk_empresa
         INNER JOIN Componente ON Maquina.id_maquina = Componente.fk_maquina
         WHERE id_maquina = 1 and nome_componente LIKE 'Processador%';
         
-SELECT * FROM Maquina;
 SELECT id_componente, nome_componente FROM Empresa
 		INNER JOIN Maquina ON Empresa.id_empresa = Maquina.fk_empresa
         INNER JOIN Componente ON Maquina.id_maquina = Componente.fk_maquina
         WHERE id_maquina = 1;
         
-select id_empresa, data_hora, medida, capacidade_componente, 
-        fabricante_componente, nome_componente, modelo_componente, 
-        nome_maquina, sistema_operacional_maquina, tipo_maquina, 
-        nome_empresa, (capacidade_componente - medida) as livre
-        from Empresa
-        INNER JOIN Maquina ON Empresa.id_empresa = Maquina.fk_empresa
-        INNER JOIN Componente ON Maquina.id_maquina = Componente.fk_maquina
-        INNER JOIN Registro ON Componente.id_componente = Registro.fk_componente
-        WHERE nome_componente = 'Disco 2' AND id_empresa = 1
-        ORDER BY data_hora ASC LIMIT 1;
-        
-SELECT nome_componente, modelo_componente, capacidade_componente FROM Empresa
-	INNER JOIN Maquina ON Empresa.id_empresa = Maquina.fk_empresa
-	INNER JOIN Componente ON Maquina.id_maquina = Componente.fk_maquina
-    WHERE id_empresa = 1 AND nome_componente LIKE 'Disco%';
-        
 SELECT * FROM Maquina;
 SELECT * FROM Componente;
-SELECT * FROM Registro WHERE fk_componente = 4;
+SELECT * FROM Registro
+JOIN Componente ON Componente.id_componente = Registro.fk_Componente
+WHERE fk_componente = 3;
 
 SELECT * FROM Registro_Processo GROUP BY nome_processo;
         
