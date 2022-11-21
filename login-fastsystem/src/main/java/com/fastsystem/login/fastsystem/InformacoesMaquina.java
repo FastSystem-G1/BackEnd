@@ -59,7 +59,7 @@ public class InformacoesMaquina {
         inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
-        //inserirInformacoesProcesso(idMaquina);
+        inserirInformacoesProcesso(idMaquina);
         JOptionPane.showMessageDialog(
                 null,
                 "Login efetuado com sucesso!",
@@ -246,16 +246,17 @@ public class InformacoesMaquina {
     }
     
     public void inserirInformacoesProcesso(Integer idMaquina) {
-         Integer quantidade = looca.getGrupoDeProcessos().getTotalProcessos();
+        Integer quantidade = looca.getGrupoDeProcessos().getTotalProcessos();
 
         try {
             banco.update(
-                    "DELETE FROM Registro_Processo WHERE fk_maquina = " + idMaquina + ";"
+                "DELETE FROM Registro_Processo WHERE fk_maquina = " + idMaquina + ";"
             );
         } catch (Exception e) {}
             
         dataAtual = LocalDateTime.now();
         dataFormatada = dataAtual.format(formatoData);
+        System.out.println("Entrei nos processos");
         try {
             for (int i = 0; i < quantidade; i++) {
                 String nome = looca.getGrupoDeProcessos().getProcessos().get(i).getNome();
@@ -264,7 +265,10 @@ public class InformacoesMaquina {
                         + "( null, '" + nome + "', '" + dataFormatada + "', " + false + "," + idMaquina + ");"
                 );
             }
-        } catch(Exception e) {}
+            System.out.println("Processos cadastrados com sucesso.");
+        } catch(Exception e) {
+            System.out.println("Deu exception, mas segue o jogo.");
+        }
         
          System.out.println(quantidade + " processo(s) cadastrado(s).");
     }
