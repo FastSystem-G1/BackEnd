@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
@@ -38,16 +39,21 @@ public class InformacoesMaquina {
     }
 
     public void inserirInformacoesBanco(Integer idMaquina) {
+        EmpresaMaquina select;
+        select = banco.queryForObject(
+                "SELECT id_empresa FROM Empresa JOIN Maquina ON id_empresa=fk_empresa WHERE id_maquina="+idMaquina+";", 
+                new BeanPropertyRowMapper<>(EmpresaMaquina.class)
+        );
         Timer timer = new Timer();
         TimerTask tarefa = new TimerTask() {
             @Override
             public void run() {
-                inserirInformacoesProcesso(idMaquina);
-                inserirInformacoesSistema(idMaquina);
+                inserirInformacoesProcesso(idMaquina, select.getIdEmpresa());
             }
         };
-        timer.scheduleAtFixedRate(tarefa, 0, 10000);
+        timer.scheduleAtFixedRate(tarefa, 0, 30000);
         
+        inserirInformacoesSistema(idMaquina);
         inserirInformacoesProcessador(idMaquina);
         inserirInformacoesMemoria(idMaquina);
         inserirInformacoesDisco(idMaquina);
@@ -228,8 +234,16 @@ public class InformacoesMaquina {
         System.out.println(quantidade + " disco(s) cadastrado(s).");
     }
     
-    public void inserirInformacoesProcesso(Integer idMaquina) {
+    public void inserirInformacoesProcesso(Integer idMaquina, Integer idEmpresa) {
         Integer quantidade = looca.getGrupoDeProcessos().getTotalProcessos();
+        dataAtual = LocalDateTime.now();
+        dataFormatada = dataAtual.format(formatoData);
+        Integer quantidadeProcessos = 0;
+        List apps = banco.queryForList(
+            "SELECT nome_app FROM App_Empresa\n" +
+            "JOIN App ON App.id_app = App_empresa.fk_app\n" +
+            "WHERE fk_empresa = "+idEmpresa+";"  
+        );
 
         try {
             banco.update(
@@ -238,16 +252,21 @@ public class InformacoesMaquina {
         } catch (Exception e) {
             System.out.println("A máquina não possuí processos salvos.");
         }
-            
-        dataAtual = LocalDateTime.now();
-        dataFormatada = dataAtual.format(formatoData);
-        Integer quantidadeProcessos = 0;
+        
         try {
             for (int i = 0; i < quantidade; i++) {
                 String nome = looca.getGrupoDeProcessos().getProcessos().get(i).getNome();
+                Boolean is_autorizado = true;
+                for (int j = 0; j < apps.size(); j ++) {
+                    String nomeLista = apps.get(j).toString();
+                    String nomeFormatado = nomeLista.substring(10, nomeLista.length()-1);
+                    if (nomeFormatado.equals(nome)) {
+                        is_autorizado = false;
+                    }
+                }
                 banco.update(
                         "INSERT INTO Registro_Processo (id_registro_processo, nome_processo, data_hora, is_autorizado, fk_maquina) VALUES "
-                        + "( null, '" + nome + "', '" + dataFormatada + "', " + false + "," + idMaquina + ");"
+                        + "( null, '" + nome + "', '" + dataFormatada + "', " + is_autorizado + "," + idMaquina + ");"
                 );
                 quantidadeProcessos++;
             }
@@ -255,7 +274,7 @@ public class InformacoesMaquina {
         } catch(Exception e) {
             System.out.println(
                     "\nQuantidade de processos salvos no banco até a exception: "+quantidadeProcessos+"."+
-                    "\nQuantidade de processos inicial ao todo: "+quantidade+"."
+                    "\nQuantidade de processos inicial ao todo: "+quantidade+".\n"
             );
         }
     }
