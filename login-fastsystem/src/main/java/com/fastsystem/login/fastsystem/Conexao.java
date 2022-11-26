@@ -9,14 +9,16 @@ public class Conexao {
     public Conexao() {
         BasicDataSource dataSource = new BasicDataSource();
         
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/fastsystem?useTimezone=true&serverTimezone=UTC");
+        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        //Se estiver na faculdade mudar o localhost para "localhost:3306".
+        // dataSource.setUrl("jdbc:mysql://localhost:3306/FastSystem?useTimezone=true&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:sqlserver://fast-system-server.database.windows.net:1433;database=FastSystem;encryp t=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;");
         //Se estiver na faculdade mudar o Username para "aluno" ou manter "root".
         // dataSource.setUsername("aluno");
-        dataSource.setUsername("root");
+        dataSource.setUsername("admin-fast-system");  //221-1adsc-grupo10@bandtec.com.br
         //Se estiver na faculdade mudar a senha para "sptech" ou "spt3ch".
         // dataSource.setPassword("sptech");
-        dataSource.setPassword("Lucimar1808");
+        dataSource.setPassword("#Gfgrupo10");
 
         this.connection = new JdbcTemplate(dataSource);
     }
