@@ -233,28 +233,28 @@ public class Login extends javax.swing.JFrame {
             EmpresaMaquina login;
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
-            
-            Timer timer = new Timer();
-            TimerTask tarefa = new TimerTask() {
-                @Override
-                public void run() {
-                    if (info.looca.getProcessador().getUso() > 80) {
-                        System.out.println("ENTREI");
-                        SlackAlert.sendMessage("Alerta de alto risco ao uso da CPU!!!\n "
-                                + info.looca.getProcessador().getUso()
-                                + "% de CPU em uso."
-                        );
-                    }
-                    long porcentagemUso = (info.looca.getMemoria().getEmUso() * 100) / info.looca.getMemoria().getTotal();
-                    if (porcentagemUso > 80) {
-                        SlackAlert.sendMessage("Alerta de risco ao alto uso de MEMÓRIA!!!\n "
-                                + info.looca.getMemoria().getEmUso()
-                                + "% de MEMÓRIA em uso."
-                        );
-                    }
-                }
-            };
-            timer.scheduleAtFixedRate(tarefa, 0, 5000);
+//
+//            Timer timer = new Timer();
+//            TimerTask tarefa = new TimerTask() {
+//                @Override
+//                public void run() {
+//                    System.out.println("ENTREI RUN");
+//                    if (info.looca.getProcessador().getUso() > 5) {
+//                        System.out.println("ENTREI");
+//                        SlackAlert.sendMessage(String.format("Alerta de alto risco ao uso da CPU!!!\n                                + \"% de CPU em uso.\"\n"
+//                                + "%.2f de uso da CPU",
+//                                info.looca.getProcessador().getUso())
+//                        );
+//                    }
+//                    long porcentagemUso = (info.looca.getMemoria().getEmUso() * 100) / info.looca.getMemoria().getTotal();
+//                    if (porcentagemUso > 80) {
+//                        SlackAlert.sendMessage(String.format("Alerta de alto risco ao uso de MEMÓRIA RAM!!!\n%.2f de uso",
+//                                info.looca.getMemoria().getEmUso())
+//                        );
+//                    }
+//                }
+//            };
+//            timer.scheduleAtFixedRate(tarefa, 0, 5000);
         } else {
             Logs.escreverTexto(pathLogLoginError, "\n Erro ao realizar Login!!!"
                     + "\n Data e hora: ");
