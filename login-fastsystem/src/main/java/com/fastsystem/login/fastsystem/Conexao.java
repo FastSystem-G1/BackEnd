@@ -11,21 +11,34 @@ public class Conexao {
         BasicDataSource dataSource = new BasicDataSource();
         BasicDataSource dataSourceAzure = new BasicDataSource();
         
+        //MySQL local!!!
+        //MySQL no Docker
+        // dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        // dataSource.setUrl("jdbc:mysql://localhost:3306/FastSystem?useTimezone=true&serverTimezone=UTC");
+        // dataSource.setUsername("root");
+        // dataSource.setPassword("");
+        
         //MySQL no Docker
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://172.17.0.2:3306/FastSystem?useTimezone=true&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://172.28.5.0:3306/FastSystem?useTimezone=true&serverTimezone=UTC");
         dataSource.setUsername("root");
         dataSource.setPassword("urubu100");
         
         //SQL Server na Azure
-         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        dataSource.setUrl("jdbc:sqlserver://fast-system-server.database.windows.net:1433;database=FastSystem;encryp t=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;");
-        dataSource.setUsername("admin-fast-system");  //221-1adsc-grupo10@bandtec.com.br
-        dataSource.setPassword("#Gfgrupo10");
+        try{
+            dataSourceAzure.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            dataSourceAzure.setUrl("jdbc:sqlserver://fast-system-server.database.windows.net:1433;database=FastSystem;encryp t=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;");
+            dataSourceAzure.setUsername("admin-fast-system");  //221-1adsc-grupo10@bandtec.com.br
+            dataSourceAzure.setPassword("#Gfgrupo10");
+        }
+        catch(Exception e){
+            System.out.println("Nao entrou");
+        }
+        
         
         //Constructor
         this.connection = new JdbcTemplate(dataSource);
-        this.connection = new JdbcTemplate(dataSourceAzure);
+        this.connectionAzure = new JdbcTemplate(dataSourceAzure);
     }
     
     public JdbcTemplate getConnection() {

@@ -210,10 +210,13 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Conexao con = new Conexao();
+        Conexao con2 = new Conexao();
         InformacoesMaquina info = new InformacoesMaquina();
 
         con.getConnection();
+        con2.getConnectionAzure();
         JdbcTemplate banco = con.getConnection();
+        JdbcTemplate banco2 = con2.getConnectionAzure();
 
         String email_usuario = String.valueOf(emailField.getText());
         String senha_usuario = String.valueOf(senhaField.getText());
@@ -223,38 +226,23 @@ public class Login extends javax.swing.JFrame {
                 + "and senha_maquina = '" + senha_usuario + "';";
 
         List loginSelect = banco.queryForList(selectRealizarLogin);
+        List loginSelect2 = banco2.queryForList(selectRealizarLogin);
 
-        String pathLogLoginError = "logs/logs-error-login.txt";
-        String pathLogLoginSucess = "logs/logs-sucess-login.txt";
+        String pathLogLoginError = "Logs/logs-error-login.txt";
+        String pathLogLoginSucess = "Logs/logs-sucess-login.txt";
 
-        if (!loginSelect.isEmpty()) {
+        if (!(loginSelect.isEmpty()) && !(loginSelect2.isEmpty())) {
+            
             Logs.escreverTexto(pathLogLoginSucess, "\n Login realizado com sucesso!!!"
                     + "\n Data e hora: ");
             EmpresaMaquina login;
+            
             login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
             info.inserirInformacoesBanco(login.getIdMaquina());
-//
-//            Timer timer = new Timer();
-//            TimerTask tarefa = new TimerTask() {
-//                @Override
-//                public void run() {
-//                    System.out.println("ENTREI RUN");
-//                    if (info.looca.getProcessador().getUso() > 5) {
-//                        System.out.println("ENTREI");
-//                        SlackAlert.sendMessage(String.format("Alerta de alto risco ao uso da CPU!!!\n                                + \"% de CPU em uso.\"\n"
-//                                + "%.2f de uso da CPU",
-//                                info.looca.getProcessador().getUso())
-//                        );
-//                    }
-//                    long porcentagemUso = (info.looca.getMemoria().getEmUso() * 100) / info.looca.getMemoria().getTotal();
-//                    if (porcentagemUso > 80) {
-//                        SlackAlert.sendMessage(String.format("Alerta de alto risco ao uso de MEMÓRIA RAM!!!\n%.2f de uso",
-//                                info.looca.getMemoria().getEmUso())
-//                        );
-//                    }
-//                }
-//            };
-//            timer.scheduleAtFixedRate(tarefa, 0, 5000);
+            
+            login = banco2.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
+            info.inserirInformacoesBancoAzure(login.getIdMaquina());
+
         } else {
             Logs.escreverTexto(pathLogLoginError, "\n Erro ao realizar Login!!!"
                     + "\n Data e hora: ");
