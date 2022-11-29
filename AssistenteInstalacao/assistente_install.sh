@@ -15,9 +15,8 @@ echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7) : Olá você já tem o jav
 sleep 2
 else
 echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7)  Opa! Não identifiquei nenhuma versão do Java instalado, mas sem problemas, irei resolver isso agora!"
-sleep 2
-echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7)  Confirme para mim se realmente deseja instalar o Java (Y/n)?"		
-echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7)  Ok! Você escolheu instalar o Java ;D"
+sleep 2	
+echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7)  Instalando Java... ;D"
 sleep 2
 sudo apt-get install default-jre
 echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7)  Atualizando Pacotes! Quase lá."
@@ -27,7 +26,6 @@ echo "$(tput setaf 10)[Bot assistant]:$(tput setaf 7)  Baixando docker."
 docker --version
 if [ $? > 0 ];
 then
-	echo "TESTE PARA VER SE FUNCIONA IF"
 	sudo apt install docker.io -y
 	sudo systemctl start docker
 	sudo systemctl enable docker
