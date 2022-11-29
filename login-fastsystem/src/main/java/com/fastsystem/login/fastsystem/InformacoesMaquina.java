@@ -346,7 +346,7 @@ public class InformacoesMaquina {
         Integer capacidade = 100;
         //Calculo para descobrir quanto está disponivel: (100 - looca.getProcessador().getUso());
 
-        Integer idComponenteBanco = componenteExiste(idMaquina, nome);
+        Integer idComponenteBanco = componenteExisteAzure(idMaquina, nome);
         Integer idComponente;
 
         if (idComponenteBanco != 0) {
@@ -396,7 +396,7 @@ public class InformacoesMaquina {
         Integer isAtivo = 1;
         Long capacidade = looca.getMemoria().getTotal() / 1000000000;
 
-        Integer idComponenteBanco = componenteExiste(idMaquina, nome);
+        Integer idComponenteBanco = componenteExisteAzure(idMaquina, nome);
         Integer idComponente;
 
         if (idComponenteBanco != 0) {
@@ -454,7 +454,7 @@ public class InformacoesMaquina {
                 capacidade = looca.getGrupoDeDiscos().getDiscos().get(i - 1).getTamanho() / 1000000000;
             }
 
-            Integer idComponenteBanco = componenteExiste(idMaquina, nome);
+            Integer idComponenteBanco = componenteExisteAzure(idMaquina, nome);
             Integer idComponente;
 
             if (idComponenteBanco != 0) {
