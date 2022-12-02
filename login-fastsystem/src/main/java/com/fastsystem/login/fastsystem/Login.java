@@ -2,20 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-/* COMANDO JAR NO TERMINAL: 
-java -jar login-fastsystem-1.0-SNAPSHOT-jar-with-dependencies.jar */
-
 package com.fastsystem.login.fastsystem;
 
 import java.awt.Color;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.swing.JOptionPane;
 import java.awt.Point;
 import static java.lang.Thread.sleep;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -44,24 +40,20 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"/assets.icons/padlock.png","Email de Usuário");
-        senhaField = new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),"padlock","Senha");
+        emailField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon"," Email");
+        senhaField = new com.fastsystem.login.fastsystem.JPassWordFieldHint(new javax.swing.JTextField(),"padlock"," Senha");
         jButton1 = new javax.swing.JButton();
-        maquinaField = new com.fastsystem.login.fastsystem.JTextFieldHint(new javax.swing.JTextField(),"user-icon","Nome da máquina");
-
-        jLabel2.setText("jLabel2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(240, 240, 240));
         setMinimumSize(new java.awt.Dimension(400, 410));
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(400, 316));
         setResizable(false);
         setSize(new java.awt.Dimension(400, 410));
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -80,38 +72,38 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(1, 14, 60));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60)));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons/logo3.png"))); // NOI18N
+        jPanel1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 80));
 
         jLabel3.setFont(new java.awt.Font("Baskerville Old Face", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 204, 204));
+        jLabel3.setForeground(new java.awt.Color(0, 194, 203));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Fast System");
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/logo3.png"))); // NOI18N
+        jLabel1.setText("A LOGO VAI AQUI");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(1, 14, 60), null, new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60), new java.awt.Color(1, 14, 60)));
 
-        jLabel4.setBackground(new java.awt.Color(240, 240, 240));
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(91, 95, 99));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -139,7 +131,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        emailField.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
+        emailField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
         emailField.setForeground(new java.awt.Color(102, 102, 102));
 
         senhaField.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
@@ -167,40 +159,34 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        maquinaField.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
-        maquinaField.setForeground(new java.awt.Color(102, 102, 102));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(maquinaField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(senhaField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(senhaField, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel4)
-                .addGap(19, 19, 19)
+                .addGap(23, 23, 23)
                 .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(senhaField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(maquinaField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,7 +201,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -224,35 +210,42 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Conexao con = new Conexao();
+        Conexao con2 = new Conexao();
         InformacoesMaquina info = new InformacoesMaquina();
 
         con.getConnection();
+        con2.getConnectionAzure();
         JdbcTemplate banco = con.getConnection();
+        JdbcTemplate banco2 = con2.getConnectionAzure();
 
         String email_usuario = String.valueOf(emailField.getText());
         String senha_usuario = String.valueOf(senhaField.getText());
-        String maquina_usuario = String.valueOf(maquinaField.getText());
 
-        List loginSelect = banco.queryForList(
-                "SELECT id_empresa, id_maquina FROM Maquina\n"
-                + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
-                + "WHERE nome_maquina = '" + maquina_usuario + "' "
-                + "and email_empresa = '" + email_usuario + "' "
-                + "and senha_empresa = '" + senha_usuario + "'; "
-        );
-        
-        EmpresaMaquina login;
-        login = banco.queryForObject(
-                "SELECT id_empresa, id_maquina FROM Maquina\n"
-                        + "INNER JOIN Empresa ON Empresa.id_empresa = Maquina.fk_empresa\n"
-                        + "WHERE nome_maquina = '" + maquina_usuario + "' "
-                                + "and email_empresa = '" + email_usuario + "' "
-                                        + "and senha_empresa = '" + senha_usuario + "'; ",
-                new BeanPropertyRowMapper<>(EmpresaMaquina.class));
+        String selectRealizarLogin = "SELECT id_maquina FROM Maquina \n"
+                + "WHERE email_maquina = '" + email_usuario + "' \n"
+                + "and senha_maquina = '" + senha_usuario + "';";
 
-        if (!loginSelect.isEmpty()) {
-            info.inserirInformacoesBanco(login.getIdMaquina(), login.getIdEmpresa());
+        List loginSelect = banco.queryForList(selectRealizarLogin);
+        List loginSelect2 = banco2.queryForList(selectRealizarLogin);
+
+        String pathLogLoginError = "Logs/logs-error-login.txt";
+        String pathLogLoginSucess = "Logs/logs-sucess-login.txt";
+
+        if (!(loginSelect.isEmpty()) && !(loginSelect2.isEmpty())) {
+            
+            Logs.escreverTexto(pathLogLoginSucess, "\n Login realizado com sucesso!!!"
+                    + "\n Data e hora: ");
+            EmpresaMaquina login;
+            
+            login = banco.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
+            info.inserirInformacoesBanco(login.getIdMaquina());
+            
+            login = banco2.queryForObject(selectRealizarLogin, new BeanPropertyRowMapper<>(EmpresaMaquina.class));
+            info.inserirInformacoesBancoAzure(login.getIdMaquina());
+
         } else {
+            Logs.escreverTexto(pathLogLoginError, "\n Erro ao realizar Login!!!"
+                    + "\n Data e hora: ");
             Point p = this.getLocation();
             Login loginGui = this;
             new Thread() {
@@ -268,13 +261,12 @@ public class Login extends javax.swing.JFrame {
                         loginGui.setLocation(p.x, p.y);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    };
+                    }
                 }
-            };
-            JOptionPane.showMessageDialog(null, "Email ou senha inválidos! \nVerifique também se máquina está correta!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
+            }.start();
+            JOptionPane.showMessageDialog(null, "Email ou senha inválidos!", "Login não autorizado", JOptionPane.ERROR_MESSAGE);
             emailField.setText("");
             senhaField.setText("");
-            maquinaField.setText("");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -356,12 +348,10 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField maquinaField;
     private javax.swing.JTextField senhaField;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,6 +1,8 @@
-C:\Users\fe-go\Desktop\FastSystem\BackEnd\login-fastsystem\src\main\java\com\fastsystem\login\fastsystem\InformacoesMaquina.java
-C:\Users\fe-go\Desktop\FastSystem\BackEnd\login-fastsystem\src\main\java\com\fastsystem\login\fastsystem\JPassWordFieldHint.java
-C:\Users\fe-go\Desktop\FastSystem\BackEnd\login-fastsystem\src\main\java\com\fastsystem\login\fastsystem\Login.java
-C:\Users\fe-go\Desktop\FastSystem\BackEnd\login-fastsystem\src\main\java\com\fastsystem\login\fastsystem\JTextFieldHint.java
-C:\Users\fe-go\Desktop\FastSystem\BackEnd\login-fastsystem\src\main\java\com\fastsystem\login\fastsystem\Conexao.java
-C:\Users\fe-go\Desktop\FastSystem\BackEnd\login-fastsystem\src\main\java\com\fastsystem\login\fastsystem\EmpresaMaquina.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/InformacoesMaquina.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/JPassWordFieldHint.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/Logs.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/Conexao.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/Login.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/EmpresaMaquina.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/SlackAlert.java
+/home/ubuntu/Desktop/BackEnd/login-fastsystem/src/main/java/com/fastsystem/login/fastsystem/JTextFieldHint.java
